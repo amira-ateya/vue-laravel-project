@@ -1,0 +1,60 @@
+{
+    "users": [
+      {
+        "id": 1,
+        "name": "Ahmed Senussi",
+        "email": "ahmed@example.com",
+        "password": "hashed_password",
+        "role": "employer", 
+        "profile": {
+          "bio": "Software engineer with 5 years experience",
+          "location": "Cairo",
+          "technologies": ["Vue", "Laravel", "Docker"]
+        }
+      }
+    ],
+    "jobs": [
+      {
+        "id": 1,
+        "employerId": 1,
+        "title": "Frontend Developer",
+        "description": "Looking for a Vue developer.",
+        "requirements": "Experience with Vue, Pinia, Vite",
+        "category": "Programming",
+        "location": "Remote",
+        "technologies": ["Vue", "Pinia"],
+        "type": "remote", 
+        "salaryRange": "5000 - 7000 EGP",
+        "benefits": "Flexible hours, remote work",
+        "applicationDeadline": "2025-05-30",
+        "approved": true
+      }
+    ],
+    "applications": [
+      {
+        "id": 1,
+        "jobId": 1,
+        "candidateId": 2,
+        "resume": "uploads/resume.pdf",
+        "status": "pending"
+      }
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "jobId": 1,
+        "userId": 2,
+        "content": "Is this position still open?",
+        "date": "2025-05-04"
+      }
+    ],
+    "notifications": [
+      {
+        "id": 1,
+        "userId": 2,
+        "message": "Your application has been accepted",
+        "read": false
+      }
+    ]
+  }
+  
