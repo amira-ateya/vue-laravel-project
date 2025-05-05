@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Public/Home.vue'
 import CandidateApplication from '@/components/candidate/candidateApplication.vue'
-import CandidateViewJobs from '@/components/candidate/candidateViewJobs.vue'
+import CandidateViewJobs from '@/components/candidate/candidateViewJobs/candidateViewJobsPage.vue'
 import CandidatePublicProfile from '@/components/candidate/candidatePublicProfile.vue'
 import JobListingPage from '@/components/employer/jobListingPage/jobListingPage.vue'
 import AllApplicantsPage from '@/components/employer/AllApplicantsPage/allApplicantsPage.vue'
