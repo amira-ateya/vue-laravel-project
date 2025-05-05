@@ -6,7 +6,6 @@
         <!-- logo -->
         <img src="./../../../public/logo.svg" alt="logo" class="mb-3">
 
-
         <!-- Conditional Rendering for Candidate View -->
         <template v-if="userRole === 'candidate'">
           <!-- candidate dashboard -->
@@ -35,44 +34,27 @@
           </router-link>
         </template>
 
-
-
-
-
-
-
-
-
-        <!--==========================EMPLOYRE VIEW==============================-->
+        <!--==========================EMPLOYER VIEW==============================-->
         <template v-else-if="userRole === 'employer'">
           <!-- employer dashboard -->
           <router-link
             to="/employer/dashboard"
             :class="['nav-link d-flex align-items-center px-2 py-2', route.path === '/employer/dashboard' ? 'active-link' : 'text-secondary']"
-          > <i class="fas fa-home me-2"></i>Dashboard
+          > <i class="fas fa-home me-2"></i> Dashboard
           </router-link>
           <!-- employer manage jobs -->
           <router-link
-            to="/employer/manage-jobs"
-            :class="['nav-link d-flex align-items-center px-2 py-2', route.path === '/employer/manage-jobs' ? 'active-link' : 'text-secondary']"
-          > <i class="fas fa-briefcase me-2"></i> Manage Jobs
+            to="/employer/all-applicants"
+            :class="['nav-link d-flex align-items-center px-2 py-2', route.path === '/employer/all-applicants' ? 'active-link' : 'text-secondary']"
+          > <i class="fas fa-briefcase me-2"></i> All Applicants
           </router-link>
           <!-- employer view applicants -->
           <router-link
-            to="/employer/view-applicants"
-            :class="['nav-link d-flex align-items-center px-2 py-2', route.path === '/employer/view-applicants' ? 'active-link' : 'text-secondary']"
-          > <i class="fas fa-users me-2"></i> View Applicants
+            to="/employer/job-listing"
+            :class="['nav-link d-flex align-items-center px-2 py-2', route.path === '/employer/job-listing' ? 'active-link' : 'text-secondary']"
+          > <i class="fas fa-users me-2"></i> Job Listing
           </router-link>
         </template>
-        
-
-
-
-
-
-
-
-
       </nav>
 
       <hr><!-- LINE ----------------------------------------------------------------------------->
@@ -83,14 +65,14 @@
       <nav class="nav flex-column mt-2">
         <!-- settings -->
         <router-link
-          to="/settings"
-          :class="['nav-link d-flex align-items-center px-2 py-2', route.path === '/settings' ? 'active-link' : 'text-secondary']"
+          :to="`/${userRole}/settings`"
+          :class="['nav-link d-flex align-items-center px-2 py-2', route.path === `/${userRole}/settings` ? 'active-link' : 'text-secondary']"
         > <i class="fas fa-cog me-2"></i> Settings
         </router-link>
         <!-- help -->
         <router-link
-          to="/help"
-          :class="['nav-link d-flex align-items-center px-2 py-2', route.path === '/help' ? 'active-link' : 'text-secondary']"
+          :to="`/${userRole}/help`"
+          :class="['nav-link d-flex align-items-center px-2 py-2', route.path === `/${userRole}/help` ? 'active-link' : 'text-secondary']"
         > <i class="fas fa-question-circle me-2"></i> Help Center
         </router-link>
       </nav>
@@ -104,18 +86,15 @@
         <div class="text-muted" style="font-size: 0.875rem;">jakegyll@email.com</div> <!-- email -->
       </div>
     </div>
-    
   </aside>
 </template>
-
-
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const userRole = ref('')
+const userRole = ref('candidate') //DEFAULT
 ///////////////MONITOR/THE/CHANGE/IN/URL/////////////////////////////////////
 const updateUserRole = () => {userRole.value = route.path.split('/')[1] || ''}
 watch(route, updateUserRole, { immediate: true })
@@ -127,6 +106,12 @@ onMounted(updateUserRole)
 .active-link {
   background-color: #e9ebfd;
   color: #4640de !important;
+  border-radius: 8px;
+}
+
+.nav-link:hover {
+  color: #007bff; /* Adjust hover color */
+  background-color: #f1f1f1; /* Adjust hover background */
   border-radius: 8px;
 }
 </style>
