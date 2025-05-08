@@ -3,6 +3,7 @@ import Home from '../views/Public/Home.vue'
 import CandidateApplication from '@/components/candidate/candidateApplication.vue'
 import CandidateViewJobs from '@/components/candidate/candidateViewJobs.vue'
 import CandidatePublicProfile from '@/components/candidate/candidatePublicProfile.vue'
+import CandidateApplyModel from '@/components/candidate/candidateApplyModel.vue'
 import JobListingPage from '@/components/employer/jobListingPage/jobListingPage.vue'
 import AllApplicantsPage from '@/components/employer/AllApplicantsPage/allApplicantsPage.vue'
 
@@ -13,7 +14,7 @@ const routes = [
   { path: '/candidate/applications', name: 'CandidateApplications', component: CandidateApplication},
   { path: '/candidate/jobs', name: 'CandidateJobs', component: CandidateViewJobs},
   { path: '/candidate/profile', name: 'CandidateProfile', component: CandidatePublicProfile},
-
+  {path: '/candidate/ApplyModel', name:'candidateApplyModel',component:CandidateApplyModel},
 
 
   // EMPLOYER
