@@ -1,7 +1,7 @@
 {
   "users": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Admin User",
       "email": "admin@example.com",
       "password": "hashed-password",
@@ -11,7 +11,7 @@
       "updated_at": "2025-05-01T12:00:00Z"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Company A",
       "email": "employer@example.com",
       "password": "hashed-password",
@@ -21,7 +21,7 @@
       "updated_at": "2025-05-01T12:00:00Z"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Candidate A",
       "email": "candidate@example.com",
       "password": "hashed-password",
@@ -33,7 +33,7 @@
   ],
   "employers": [
     {
-      "id": 1,
+      "id": "1",
       "user_id": 2,
       "company_name": "Company A",
       "company_website": "https://companya.com",
@@ -45,7 +45,7 @@
   ],
   "candidates": [
     {
-      "id": 1,
+      "id": "1",
       "user_id": 3,
       "resume": "/resumes/candidate-a.pdf",
       "linkedin_profile": "https://linkedin.com/in/candidate-a",
@@ -58,7 +58,7 @@
   ],
   "jobs": [
     {
-      "id": 1,
+      "id": "1",
       "employer_id": 1,
       "title": "Frontend Developer",
       "description": "Build modern UI with Vue.",
@@ -74,11 +74,53 @@
       "status": "approved",
       "created_at": "2025-05-01T12:00:00Z",
       "updated_at": "2025-05-01T12:00:00Z"
+    },
+    {
+      "id": "2210",
+      "title": "ddd",
+      "work_type": "contract",
+      "salary_min": 100,
+      "salary_max": 200,
+      "currency": "USD",
+      "category": "programming",
+      "skills": "",
+      "description": "fffffffff",
+      "responsibilities": "ffffffff",
+      "location_type": "remote",
+      "location": "",
+      "technologies": "ddd",
+      "benefits": "healthcare",
+      "additional_benefits": "dd",
+      "deadline": "",
+      "salary_range": "100-200",
+      "employer_id": 1,
+      "status": "pending"
+    },
+    {
+      "id": "c19a",
+      "title": "ddd",
+      "work_type": "full-time",
+      "salary_min": 100,
+      "salary_max": 500,
+      "currency": "USD",
+      "category": "design",
+      "skills": "",
+      "description": "hello",
+      "responsibilities": "heeelo",
+      "location_type": "remote",
+      "location": "",
+      "technologies": "fff",
+      "benefits": "healthcare",
+      "additional_benefits": "kkk",
+      "deadline": "",
+      "salary_range": "100-500",
+      "employer_id": 1,
+      "status": "pending"
     }
   ],
   "applications": [
     {
-      "id": 1,
+      "id": "1",
       "job_id": 1,
       "candidate_id": 1,
       "resume_snapshot": "/resumes/candidate-a.pdf",
@@ -91,7 +133,7 @@
   ],
   "comments": [
     {
-      "id": 1,
+      "id": "1",
       "job_id": 1,
       "user_id": 3,
       "comment_text": "Is this position still open?",
@@ -101,7 +143,7 @@
   ],
   "job_analytics": [
     {
-      "id": 1,
+      "id": "1",
       "job_id": 1,
       "views_count": 150,
       "applications_count": 12,
@@ -111,7 +153,7 @@
   ],
   "payments": [
     {
-      "id": 1,
+      "id": "1",
       "application_id": 1,
       "employer_id": 1,
       "amount": 50,
@@ -123,7 +165,7 @@
   ],
   "job_filters": [
     {
-      "id": 1,
+      "id": "1",
       "user_id": 3,
       "filters_json": "{\"category\": \"programming\", \"location\": \"Remote\"}",
       "created_at": "2025-05-02T10:00:00Z"
