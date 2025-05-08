@@ -1,28 +1,25 @@
 <template>
   <div class="container-fluid d-flex">
-    <Dashboard />
+    <!-- Show only if NOT on login or register paths -->
+    <Dashboard v-if="!isAuthPage" />
 
-    <!-- right side -->
-    <div class="container-fluid d-flex flex-column  p-0">
-      <HeaderPerPage/>
+    <div class="container-fluid d-flex flex-column p-0">
+      <HeaderPerPage v-if="!isAuthPage" />
       <RouterView />
     </div>
   </div>
-
 </template>
 
-
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { useRoute } from 'vue-router';
+import { computed } from 'vue';
+
 import Dashboard from './components/dashboard/dashboard.vue';
 import HeaderPerPage from './components/dashboard/headerPerPage.vue';
 
+const route = useRoute();
 
-
+const isAuthPage = computed(() => {
+  return route.path === '/login' || route.path === '/register';
+});
 </script>
-
-
-
-<style scoped>
-
-</style>

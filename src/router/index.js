@@ -5,11 +5,12 @@ import CandidateViewJobs from '@/components/candidate/candidateViewJobs/candidat
 import CandidatePublicProfile from '@/components/candidate/candidatePublicProfile.vue'
 import JobListingPage from '@/components/employer/jobListingPage/jobListingPage.vue'
 import AllApplicantsPage from '@/components/employer/AllApplicantsPage/allApplicantsPage.vue'
+import Login from '@/components/login/login.vue'
 
 const routes = [
 
   // CANDIDATE
-  { path: '/', name: 'Home', component: Home },
+  { path: '/login', name: 'Login', component: Login},
   { path: '/candidate/applications', name: 'CandidateApplications', component: CandidateApplication},
   { path: '/candidate/jobs', name: 'CandidateJobs', component: CandidateViewJobs},
   { path: '/candidate/profile', name: 'CandidateProfile', component: CandidatePublicProfile},
