@@ -1,3 +1,5 @@
+// data sent from here will be affected by the filteration that wil be made
+
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import axios from 'axios'
