@@ -62,9 +62,9 @@
       "employer_id": 1,
       "title": "Frontend Developer",
       "description": "Build modern UI with Vue.",
-      "responsibilities": ["Develop and maintain frontend."],
+      "responsibilities": ["Develop and maintain frontend.", "Help other junior frontend developers", "some kind of staff to do"],
       "skills": ["Vue", "JavaScript", "CSS"],
-      "categories_id": [1],
+      "categories_id": [1, 2],
       "location": "Cairo",
       "technologies": ["Vue.js","Pinia", "Tailwind"],
       "work_type": "remote",
@@ -84,6 +84,12 @@
       "id": 1,
       "category_name": "programming",
       "category_description": "for programmers who are frontend or backend or ai engineers..etc"
+    },
+
+    {
+      "id": 2,
+      "category_name": "Sales",
+      "category_description": "for Sales for some kind of people"
     }
 
   ],
