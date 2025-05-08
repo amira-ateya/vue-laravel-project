@@ -1,6 +1,6 @@
 <!-- NEED TO BE MODULARIZED LATER: MAKE COMPONENT FOR EACH ACCORDION ITEM -->
 <template>
-  <div class="ms-4">
+  <div class="ms-5">
     <!--////////////////////////////////////////////////////////////////////////////////////////////////////////-->
 
     <div class="accordion custom-accordion" id="filterAccordion">
