@@ -1,23 +1,28 @@
+import Welcome from '@/components/welcome.vue'
+import CandidateApplication from '@/views/Candidate/candidateApplication.vue'
+import CandidatePublicProfile from '@/views/Candidate/candidatePublicProfile.vue'
+import CandidateViewJobsPage from '@/views/Candidate/candidateViewJobsPage.vue'
+import AllApplicantsPage from '@/views/Employer/allApplicantsPage.vue'
+import JobListingPage from '@/views/Employer/jobListingPage.vue'
+import Login from '@/views/login/login.vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Public/Home.vue'
-import CandidateApplication from '@/components/candidate/candidateApplication.vue'
-import CandidateViewJobs from '@/components/candidate/candidateViewJobs/candidateViewJobsPage.vue'
-import CandidatePublicProfile from '@/components/candidate/candidatePublicProfile.vue'
-import JobListingPage from '@/components/employer/jobListingPage/jobListingPage.vue'
-import AllApplicantsPage from '@/components/employer/AllApplicantsPage/allApplicantsPage.vue'
-import Login from '@/components/login/login.vue'
+
+
 
 const routes = [
+
+  { path: '/', name: 'welcome', component: Welcome},
+  { path: '/test', name: 'test', component: CandidateViewJobsPage},
 
   // CANDIDATE
   { path: '/login', name: 'Login', component: Login},
   { path: '/candidate/applications', name: 'CandidateApplications', component: CandidateApplication},
-  { path: '/candidate/jobs', name: 'CandidateJobs', component: CandidateViewJobs},
+  { path: '/candidate/jobs', name: 'theJobPage', component: CandidateViewJobsPage},
   { path: '/candidate/profile', name: 'CandidateProfile', component: CandidatePublicProfile},
 
 
 
-  // EMPLOYER
+  // // EMPLOYER
   { path: '/employer/job-listing', name: 'EmployerJobListing', component: JobListingPage},
   { path: '/employer/all-applicants', name: 'EmployerViewAllApplicants', component: AllApplicantsPage},
 

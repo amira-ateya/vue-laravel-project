@@ -3,8 +3,7 @@
     <!-- Searhc Row -->
     <SearchJob/>
 
-
-    <hr>
+    <hr> <!-- horizintal line -->
 
     <!-- Main Content Row -->
     <div class="row">
@@ -23,10 +22,13 @@
   </div>
 </template>
 
+
+
+
 <script>
-import AvailableJobs from './availableJobs.vue';
-import JobFilters from './JobFilters.vue';
-import SearchJob from './searchJob.vue';
+import AvailableJobs from '@/components/candidate/candidateViewJobs/availableJobs.vue';
+import JobFilters from '@/components/candidate/candidateViewJobs/JobFilters.vue';
+import SearchJob from '@/components/candidate/candidateViewJobs/searchJob.vue';
 
 
 export default {
@@ -36,7 +38,7 @@ export default {
     SearchJob
   },
 
-
+  
   methods: {
     onFilterChanged(filters) {
       // You can apply filter logic here or pass it to Vuex/store
