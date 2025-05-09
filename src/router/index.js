@@ -20,7 +20,18 @@ const routes = [
   { path: '/employer/job-listing', name: 'EmployerJobListing', component: JobListingPage},
   { path: '/employer/all-applicants', name: 'EmployerViewAllApplicants', component: AllApplicantsPage},
 
-
+  {
+    path: '/employer',
+    name: 'employer-dashboard',
+    component: () => import('@/views/Employer/Dashboard.vue'),
+    meta: { requiresAuth: true, role: 'employer' }
+  },
+  {
+    path: '/employer/applications',
+    name: 'employer-applications',
+    component: () => import('@/views/Employer/Applications.vue'),
+    meta: { requiresAuth: true, role: 'employer' }
+  }
 
 
 ]

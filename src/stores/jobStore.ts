@@ -3,10 +3,28 @@ import { ref } from 'vue'
 import axios from 'axios'
 
 export const useJobStore = defineStore('job', () => {
-  const jobs = ref([])
   const loading = ref(false)
-  const error = ref(null)
-
+  const error = ref<string | null>(null)
+  const jobs = ref<Job[]>([])
+  type Job = {
+    id: number
+    employer_id: number
+    title: string
+    description: string
+    responsibilities: string
+    skills: string
+    category: string
+    location: string
+    technologies: string
+    work_type: string
+    salary_range: string
+    benefits: string
+    deadline: string
+    status: 'approved' | 'pending'
+    created_at: string
+    updated_at: string
+  }
+  
   // API base URL
   const apiUrl = 'http://localhost:3000/jobs'
 
@@ -17,7 +35,12 @@ export const useJobStore = defineStore('job', () => {
     try {
       const res = await axios.get(apiUrl)
       jobs.value = res.data
-    } catch (err) {
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Error fetching jobs:", err.message)
+      } else {
+        console.error("Unknown error:", err)
+      }
       error.value = 'Failed to load jobs'
     } finally {
       loading.value = false
@@ -29,7 +52,12 @@ export const useJobStore = defineStore('job', () => {
     try {
       const res = await axios.post(apiUrl, jobData)
       jobs.value.push(res.data)
-    } catch (err) {
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Error creating job:", err.message)
+      } else {
+        console.error("Unknown error:", err)
+      }
       error.value = 'Failed to create job'
     }
   }
@@ -39,7 +67,12 @@ export const useJobStore = defineStore('job', () => {
     try {
       await axios.delete(`${apiUrl}/${id}`)
       jobs.value = jobs.value.filter(job => job.id !== id)
-    } catch (err) {
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Error deleting job:", err.message)
+      } else {
+        console.error("Unknown error:", err)
+      }
       error.value = 'Failed to delete job'
     }
   }

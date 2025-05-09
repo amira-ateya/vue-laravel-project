@@ -74,6 +74,24 @@
       "status": "approved",
       "created_at": "2025-05-01T12:00:00Z",
       "updated_at": "2025-05-01T12:00:00Z"
+    },
+    {
+      "id": 2,
+      "employer_id": 1,
+      "title": "Frontend Developer",
+      "description": "Build modern UI with Vue.",
+      "responsibilities": "Develop and maintain frontend.",
+      "skills": "Vue, JavaScript, CSS",
+      "category": "programming",
+      "location": "Remote",
+      "technologies": "Vue.js, Pinia, Tailwind",
+      "work_type": "remote",
+      "salary_range": "2000-4000",
+      "benefits": "Health insurance, Bonuses",
+      "deadline": "2025-06-01",
+      "status": "pending",
+      "created_at": "2025-05-01T12:00:00Z",
+      "updated_at": "2025-05-01T12:00:00Z"
     }
   ],
   "applications": [
@@ -89,13 +107,23 @@
       "updated_at": "2025-05-02T09:00:00Z"
     },
     {
-      "id": 1,
+      "id": 2,
       "job_id": 1,
       "candidate_id": 1,
       "resume_snapshot": "/resumes/candidate-a.pdf",
       "contact_email": "candidate@example.com",
       "contact_phone": "01000000000",
       "status": "pending",
+      "created_at": "2025-05-02T09:00:00Z",
+      "updated_at": "2025-05-02T09:00:00Z"
+    }, {
+      "id": 3,
+      "job_id": 1,
+      "candidate_id": 1,
+      "resume_snapshot": "/resumes/candidate-a.pdf",
+      "contact_email": "candidate@example.com",
+      "contact_phone": "01000000000",
+      "status": "Accepted",
       "created_at": "2025-05-02T09:00:00Z",
       "updated_at": "2025-05-02T09:00:00Z"
     }
