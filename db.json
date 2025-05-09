@@ -39,6 +39,7 @@
       "company_website": "https://companya.com",
       "company_logo": null,
       "bio": "We are a software company.",
+      "phone": "0120000000000",
       "created_at": "2025-05-01T12:00:00Z",
       "updated_at": "2025-05-01T12:00:00Z"
     }

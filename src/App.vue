@@ -22,6 +22,7 @@ import HeaderPerPage from './components/dashboard/headerPerPage.vue';
 const route = useRoute();
 
 const isAuthPage = computed(() => {
-  return route.path === '/login' || route.path === '/register';
+  return ['/login', '/register', '/candidateRegister', '/employerRegister'].includes(route.path);
 });
+
 </script>
