@@ -26,10 +26,13 @@ export const useUserStore = defineStore('user', () => {
     try {
       const res = await axios.post(apiUrl, userData)
       users.value.push(res.data)
+      return res.data 
     } catch (err) {
-      error.value = 'فشل إنشاء المستخدم'
+      error.value = 'Failed to create the user'
+      throw err 
     }
   }
+  
 
   const fetchByRole = async (role: 'admin' | 'employer' | 'candidate') => {
     loading.value = true
