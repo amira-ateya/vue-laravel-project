@@ -26,7 +26,7 @@
 
         <!-- HEAD TEXT -->
         <h1 class="text-center fw-bold mb-4">
-          {{ isJobSeeker ? 'Get More Opportunities' : 'Get High Quality Candidates' }}
+          {{ isJobSeeker ? 'Get More Opportunities' : 'Get Qualified Candidates' }}
         </h1>
 
         <!-- GOOGLE REGISTER BUTTON -->
@@ -59,18 +59,38 @@
 
         <!-- INPUT: EMAIL -->
         <div class="mb-3">
-          <label class="form-label fw-bold fs-5 text-muted">Email Address</label>
+          <label for="email" class="form-label">Email address</label>
           <input
-            v-model="formData.email"
             type="email"
             class="form-control p-3 rounded-0"
-            :class="{ 'is-invalid': submitted && !isValidEmail(formData.email) }"
-            placeholder="Enter email address"
+            placeholder="Enter Email"
+            id="email"
+            v-model="formData.email"
+            :class="{
+              'is-invalid':
+                (submitted && !formData.email) ||
+                (submitted && !isValidEmail(formData.email)) ||
+                (submitted && emailTaken)
+            }"
+            required
           />
-          <div v-if="submitted && !isValidEmail(formData.email)" class="invalid-feedback">
-            Valid email is required.
+
+          <!-- Validation: empty -->
+          <div v-if="submitted && !formData.email" class="invalid-feedback">
+            Email is required.
           </div>
+
+          <!-- Validation: invalid format -->
+          <div v-else-if="submitted && !isValidEmail(formData.email)" class="invalid-feedback">
+            Please enter a valid email address.
+          </div>
+
+          <!-- Validation: email already taken -->
+          <div v-else-if="submitted && emailTaken" class="invalid-feedback">
+            This email is already taken for this type of user.
         </div>
+</div>
+
 
         <!-- INPUT: PASSWORD -->
         <div class="mb-3">
@@ -127,13 +147,16 @@
 // IMPORTS
 import { useRouter } from 'vue-router'
 import { useRegisterStore } from '@/stores/registerStore'
+import { useUserStore } from '@/stores/userStore'
 import { reactive, ref } from 'vue'
 
 // VARIABLES
 const router = useRouter()
-const store = useRegisterStore()
+const registerStore = useRegisterStore()
+const userStore = useUserStore()
 const submitted = ref(false)
 const isJobSeeker = ref(true)
+const emailTaken = ref(false)
 
 const formData = reactive({
   fullName: '',
@@ -147,10 +170,21 @@ function isValidEmail(email) {
   return /\S+@\S+\.\S+/.test(email)
 }
 
-// SUBMIT HANDLER
-function sendData() {
-  submitted.value = true
+// EMAIL UNIQUENESS CHECK
+async function checkEmailUnique(email, role) {
+  await userStore.fetchByRole(role)
+  const existingUser = userStore.users.find(user => user.email.toLowerCase() === email.toLowerCase())
+  return !existingUser
+}
 
+// SUBMIT HANDLER
+async function sendData() {
+  submitted.value = true
+  emailTaken.value = false
+
+  const userType = isJobSeeker.value ? 'candidate' : 'employer'
+
+  // Basic validation
   if (
     !formData.fullName ||
     !isValidEmail(formData.email) ||
@@ -160,20 +194,22 @@ function sendData() {
     return
   }
 
-  const userType = isJobSeeker.value ? 'candidate' : 'employer'
+  // Check email uniqueness
+  const isUnique = await checkEmailUnique(formData.email, userType)
+  if (!isUnique) {
+    emailTaken.value = true
+    return
+  }
 
-  // SAVE DATA IN STORE
-  store.setStep1Data({
+  // SAVE DATA IN REGISTER STORE
+  registerStore.setStep1Data({
     fullName: formData.fullName,
     email: formData.email,
     password: formData.password,
     role: userType,
   })
 
-
-  console.log("store.setStep1Data = ", store.step1Data.fullName);
-
-  // REDIRECT TO SPECIFIC REGISTRATION PAGE
+  // REDIRECT TO NEXT STEP
   router.push(userType === 'candidate' ? '/candidateRegister' : '/employerRegister')
 }
 </script>

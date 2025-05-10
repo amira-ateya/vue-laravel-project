@@ -1,151 +1,231 @@
 <template>
-    <div class="d-flex vh-100">
-  
-      <!-- Left image (fixed top-left) -->
-      <div class="left-banner-container">
-        <!-- https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?fit=crop&w=500&q=80 -->
-        <img src="./login.png" alt="banner" class="left-banner-img" />
-      </div>
-  
-      <!-- Register Form -->
-      <div class="container d-flex align-items-center justify-content-center">
-        <div class="w-100" style="max-width: 500px">
-          <!-- Role Switch -->
-          <div class="d-flex justify-content-center mb-3">
-            <button class="btn rounded-0 fs-5 fw-semibold bg-text-purple">Company</button>
-          </div>
-  
-          <!-- Image Upload Section -->
-          <div class="d-flex justify-content-between mb-4">
-            <!-- Profile Image -->
-            <div class="me-2 w-50">
-              <label class="form-label">Profile Image</label>
-              <img
-                :src="profileImageUrl || defaultImage"
-                alt="Profile Preview"
-                class="img-fluid rounded border preview-img mb-2"
-              />
-              <input type="file" class="form-control" @change="handleProfileImageUpload" />
-            </div>
-  
-            <!-- Company Logo -->
-            <div class="ms-2 w-50">
-              <label class="form-label">Company Logo</label>
-              <img
-                :src="companyLogoUrl || defaultImage"
-                alt="Company Logo Preview"
-                class="img-fluid rounded border preview-img mb-2"
-              />
-              <input type="file" class="form-control" @change="handleLogoUpload" />
-            </div>
-          </div>
-  
-          <!-- Company Name -->
-          <div class="mb-3">
-            <label for="companyName" class="form-label">Company Name</label>
-            <input type="text" class="form-control" id="companyName" placeholder="Enter your company name" />
-          </div>
-  
-          <!-- Company Bio -->
-          <div class="mb-3">
-            <label for="companyBio" class="form-label">Company Bio</label>
-            <textarea class="form-control" id="companyBio" placeholder="Tell us about your company"></textarea>
-          </div>
-  
-          <!-- Company Location -->
-          <div class="mb-3">
-            <label for="companyLocation" class="form-label">Location</label>
-            <input type="text" class="form-control" id="companyLocation" placeholder="City, Country" />
-          </div>
-  
-          <!-- Company Website -->
-          <div class="mb-3">
-            <label for="companyWebsite" class="form-label">Website</label>
-            <input type="url" class="form-control" id="companyWebsite" placeholder="https://example.com" />
+  <div class="d-flex vh-100">
+    <!-- Left image (banner) -->
+    <img src="./login.png" alt="banner" class="img-fluid h-100 w-auto" />
+
+    <!-- Form Section -->
+    <div class="container d-flex align-items-center justify-content-center">
+      <div class="w-100" style="max-width: 700px;">
+        <h1 class="text-center fw-bold mb-4">Jus a Step to Go</h1>
+
+        <!-- Profile and Logo Upload -->
+        <div class="d-flex justify-content-between mb-4">
+          <!-- Profile Image -->
+          <div class="me-2 w-50">
+            <img
+              :src="profileImageUrl || defaultProfileImage"
+              alt="Profile Preview"
+              class="img-fluid rounded border mb-2"
+              style="height: 150px; object-fit: cover;"
+            />
+            <input type="file" class="form-control" @change="handleProfileImageUpload" />
           </div>
 
-
-          <!-- Phone number -->
-          <div class="mb-3">
-            <label for="PhoneNumber" class="form-label">Phone Number</label>
-            <input type="text" class="form-control" id="PhoneNumber" placeholder="enter your phone number" />
+          <!-- Company Logo -->
+          <div class="ms-2 w-50">
+            <img
+              :src="companyLogoUrl || defaultCompanyLogo"
+              alt="Company Logo Preview"
+              class="img-fluid rounded border mb-2"
+              style="height: 150px; object-fit: cover;"
+            />
+            <input type="file" class="form-control" @change="handleLogoUpload" />
           </div>
-  
-          <!-- Agree Policy -->
-          <div class="form-check mb-3">
-            <input type="checkbox" class="form-check-input" id="agreePolicy" />
-            <label class="form-check-label" for="agreePolicy">Agree the policy and rules</label>
-          </div>
-  
-          <!-- Sign Up Button -->
-          <button class="btn bg-purple rounded-0 text-white fw-bold p-3 fs-5 w-100 mb-3">Sign Up</button>
-  
-          <!-- Login Redirect -->
-          <p class="text-muted text-center">
-            Already have an account?
-            <a href="/login" class="text-primary text-decoration-none">Login</a>
-          </p>
         </div>
+
+        <!-- Company Info -->
+        <div class="mb-3">
+          <label class="form-label">Company Name</label>
+          <input
+            type="text"
+            class="form-control"
+            v-model="companyName"
+            :class="{ 'is-invalid': submitted && !companyName }"
+            placeholder="Enter your company name"
+          />
+          <div v-if="submitted && !companyName" class="invalid-feedback">
+            Company name is required.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Company Bio</label>
+          <textarea
+            class="form-control"
+            v-model="companyBio"
+            :class="{ 'is-invalid': submitted && !companyBio }"
+            placeholder="Tell us about your company"
+          ></textarea>
+          <div v-if="submitted && !companyBio" class="invalid-feedback">
+            Company bio is required.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Location</label>
+          <input
+            type="text"
+            class="form-control"
+            v-model="location"
+            :class="{ 'is-invalid': submitted && !location }"
+            placeholder="City, Country"
+          />
+          <div v-if="submitted && !location" class="invalid-feedback">
+            Location is required.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Website</label>
+          <input
+            type="url"
+            class="form-control"
+            v-model="website"
+            :class="{ 'is-invalid': submitted && !website }"
+            placeholder="https://example.com"
+          />
+          <div v-if="submitted && !website" class="invalid-feedback">
+            Website is required.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Phone Number</label>
+          <input
+            type="tel"
+            class="form-control"
+            v-model="phone"
+            :class="{ 'is-invalid': submitted && (!phone || !isValidPhone(phone)) }"
+            placeholder="Enter your phone number"
+          />
+          <div v-if="submitted && !phone" class="invalid-feedback">
+            Phone number is required.
+          </div>
+          <div v-else-if="submitted && phone && !isValidPhone(phone)" class="invalid-feedback">
+            Phone number must contain only digits.
+          </div>
+        </div>
+
+
+        <!-- Submit Button -->
+        <button class="btn bg-purple text-white fw-bold w-100 p-3 mt-3" @click="handleEmployerSubmit">
+          Submit Company Profile
+        </button>
       </div>
     </div>
-  </template>
-  
-  <script setup>
-  import { ref } from 'vue'
-  
-  // Online placeholder preview image
-  const defaultImage = 'https://cdn-icons-png.flaticon.com/512/847/847969.png'
-  
-  const profileImageUrl = ref(null)
-  const companyLogoUrl = ref(null)
-  
-  function handleProfileImageUpload(event) {
-    const file = event.target.files[0]
-    if (file) {
-      profileImageUrl.value = URL.createObjectURL(file)
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRegisterStore } from '@/stores/registerStore'
+import { useUserStore } from '@/stores/userStore'
+import { useEmployerStore } from '@/stores/employerStore'
+import { useRouter } from 'vue-router'
+
+const registerStore = useRegisterStore()
+const userStore = useUserStore()
+const employerStore = useEmployerStore()
+const router = useRouter()
+
+onMounted(() => {
+  const { fullName, email, password } = registerStore.step1Data
+
+  console.log("fulll name = ", fullName);
+
+  if (!fullName || !email || !password) {
+    router.push('/register')
+  }
+})
+
+
+
+// Local form data
+const companyName = ref('')
+const companyBio = ref('')
+const location = ref('')
+const website = ref('')
+const phone = ref('')
+const profileImageUrl = ref(null)
+const companyLogoUrl = ref(null)
+const submitted = ref(false)
+
+// Default images
+const defaultProfileImage = "https://cdn-icons-png.flaticon.com/512/847/847969.png"
+const defaultCompanyLogo = 'https://images.ui8.net/uploads/3_1615170250124.png'
+
+// Handle image uploads
+const handleProfileImageUpload = (e) => {
+  const file = e.target.files[0]
+  if (file) profileImageUrl.value = URL.createObjectURL(file)
+}
+
+const handleLogoUpload = (e) => {
+  const file = e.target.files[0]
+  if (file) companyLogoUrl.value = URL.createObjectURL(file)
+}
+
+
+function isValidPhone(value) {
+  return /^\d+$/.test(value) // only digits, no letters, no special characters
+}
+
+
+// Submit handler
+const handleEmployerSubmit = async () => {
+  submitted.value = true
+
+
+  if (
+  !companyName.value ||
+  !companyBio.value ||
+  !location.value ||
+  !website.value ||
+  !phone.value ||
+  !isValidPhone(phone.value)
+) {
+  return
+}
+
+
+  try {
+    const step1Data = registerStore.step1Data
+
+    const userPayload = {
+      name: step1Data.fullName,
+      email: step1Data.email,
+      password: step1Data.password,
+      role: 'employer',
+      profile_picture: profileImageUrl.value || defaultProfileImage,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     }
-  }
-  
-  function handleLogoUpload(event) {
-    const file = event.target.files[0]
-    if (file) {
-      companyLogoUrl.value = URL.createObjectURL(file)
+
+    const createdUser = await userStore.createUser(userPayload)
+
+    const employerPayload = {
+      user_id: createdUser.id,
+      company_name: companyName.value,
+      company_website: website.value,
+      company_logo: companyLogoUrl.value || defaultCompanyLogo,
+      bio: companyBio.value,
+      phone: phone.value,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     }
+
+    await employerStore.createEmployer(employerPayload)
+
+    registerStore.clearData()
+    router.push('/login')
+  } catch (error) {
+    console.error('Error creating employer:', error)
   }
-  </script>
-  
-  <style scoped>
-  .text-purple {
-    color: #4444dc !important;
-  }
-  
-  .bg-purple {
-    background-color: #4444dc !important;
-  }
-  
-  .bg-text-purple {
-    background-color: #e9ebfd;
-    color: #4444dc;
-  }
-  
-  .preview-img {
-    height: 120px;
-    width: 100%;
-    object-fit: cover;
-    background-color: #f0f0f0;
-  }
-  
-  .left-banner-container {
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    height: 100vh;
-  }
-  
-  .left-banner-img {
-    height: 100vh;
-    width: auto;
-    object-fit: cover;
-  }
-  </style>
-  
+}
+</script>
+
+<style scoped>
+.bg-purple {
+  background-color: #6f42c1;
+}
+</style>

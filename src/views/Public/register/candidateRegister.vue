@@ -102,30 +102,37 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import {useRegisterStore} from './../../../stores/registerStore.js'; // register store
-import { useUserStore } from './../../../stores/userStore.ts'; // user store
+import { useRegisterStore } from './../../../stores/registerStore.js'
+import { useUserStore } from './../../../stores/userStore.ts'
 import { useCandidateStore } from '@/stores/candidateStore.ts'
-
-
-
-
 
 const router = useRouter()
 const registerStore = useRegisterStore()
 const userStore = useUserStore()
 const candidateStore = useCandidateStore()
 
+// ✅ Redirect to /register if step1Data is not filled
+onMounted(() => {
+  const { fullName, email, password } = registerStore.step1Data
+  if (!fullName || !email || !password) {
+    router.push('/register')
+  }
+})
+
+// Image and PDF preview
 const imagePreview = ref("https://cdn-icons-png.flaticon.com/512/847/847969.png")
 const pdfPreview = ref("https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")
 
+// Form fields
 const phone = ref("")
 const linkedin = ref("")
 const location = ref("")
 const experience = ref("")
 const submitted = ref(false)
 
+// Validations
 const validPhone = computed(() => /^\+?\d{10,15}$/.test(phone.value))
 const validLinkedin = computed(() => /^https?:\/\/(www\.)?linkedin\.com\/.*$/.test(linkedin.value))
 
@@ -148,9 +155,8 @@ async function handleSubmit() {
 
   if (validPhone.value && validLinkedin.value && location.value.trim() && experience.value) {
     try {
-      const timestamp = new Date().toISOString() // generate current ISO timestamp
+      const timestamp = new Date().toISOString()
 
-      // 1. Prepare user data with timestamps
       const userData = {
         fullName: registerStore.step1Data.fullName,
         email: registerStore.step1Data.email,
@@ -161,12 +167,8 @@ async function handleSubmit() {
         updated_at: timestamp
       }
 
-      // 2. Save user and get returned user object with ID
       const createdUser = await userStore.createUser(userData)
 
-      console.log("Created User:", createdUser)
-
-      // 3. Prepare candidate data with timestamps
       const candidateData = {
         user_id: createdUser.id,
         resume: pdfPreview.value,
@@ -178,13 +180,10 @@ async function handleSubmit() {
         updated_at: timestamp
       }
 
-      // 4. Save candidate data
       await candidateStore.createCandidate(candidateData)
 
-      // 5. Redirect to candidate dashboard
-      router.push('/candidate')
+      router.push('/login')
     } catch (err) {
-      alert('An error occurred while creating your account. Please try again.')
       console.error(err)
     }
   } else {
