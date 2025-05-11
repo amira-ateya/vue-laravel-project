@@ -107,36 +107,39 @@
 </template>
 
 <script setup>
+// imports
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
+import { useAuthStore } from '@/stores/authStore'; 
 
+
+// variables
 const isJobSeeker = ref(true);
-
 const email = ref('');
 const password = ref('');
-
 const emailTouched = ref(false);
 const passwordTouched = ref(false);
-
 const emailError = ref('');
 const passwordError = ref('');
 
+// stores + route
 const userStore = useUserStore();
+const authStore = useAuthStore(); 
 const router = useRouter();
 
+
+// validations
 const validateForm = () => {
   emailError.value = '';
   passwordError.value = '';
 
-  // Email validation
   if (!email.value) {
     emailError.value = 'Email is required.';
   } else if (!/\S+@\S+\.\S+/.test(email.value)) {
     emailError.value = 'Invalid email format.';
   }
 
-  // Password validation
   if (!password.value) {
     passwordError.value = 'Password is required.';
   } else if (password.value.length < 6) {
@@ -146,30 +149,41 @@ const validateForm = () => {
   return !emailError.value && !passwordError.value;
 };
 
+
+// functions
+
 const handleLogin = async () => {
+
+  //  that mean it is touched
   emailTouched.value = true;
   passwordTouched.value = true;
 
+  // check + get 
   if (validateForm()) {
-    // Fetch users from store if not already loaded
     if (userStore.users.length === 0) {
       await userStore.fetchUsers();
     }
 
-    // Check if the user exists and validate password
+    // get the user using email and pass
     const user = userStore.users.find(
       (u) => u.email === email.value && u.password === password.value
     );
 
+
     if (user) {
-      // Route to the correct page based on user role
-      if (user.role === 'candidate') {
-        router.push('/candidate/');
-      } else if (user.role === 'employer') {
-        router.push('/employer/');
+
+      // generate token using the data ++ redirect 
+      const response = await authStore.login(user); 
+
+      if (response.status === 200) {
+        if (user.role === 'candidate') {
+          router.push('/candidate/');
+        } else if (user.role === 'employer') {
+          router.push('/employer/');
+        }
       }
+      // couddn't find it 
     } else {
-      // Display invalid login message (you can enhance this with a UI feedback)
       emailError.value = 'Invalid email or password.';
       passwordError.value = 'Invalid email or password.';
     }
@@ -177,8 +191,7 @@ const handleLogin = async () => {
 };
 
 onMounted(() => {
-  // You can optionally call the store's fetch function here if needed
-  // userStore.fetchUsers();
+  // we can add something here like a preloading but later
 });
 </script>
 
@@ -186,16 +199,13 @@ onMounted(() => {
 .text-purple {
   color: #4444dc !important;
 }
-
 .bg-purple {
   background-color: #4444dc !important;
 }
-
 .border-text-purple {
   border-color: #4444dc !important;
   color: #4444dc !important;
 }
-
 .bg-text-purple {
   background-color: #e9ebfd;
   color: #4444dc;

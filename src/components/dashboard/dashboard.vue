@@ -75,6 +75,12 @@
           :class="['nav-link d-flex align-items-center px-2 py-2', route.path === `/${userRole}/help` ? 'active-link' : 'text-secondary']"
         > <i class="fas fa-question-circle me-2"></i> Help Center
         </router-link>
+
+        <button class="btn text-secondary text-start" @click="logout">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          logout
+        </button>
+
       </nav>
     </div>
 
@@ -91,16 +97,29 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore' // <-- make sure the path is correct
 
 const route = useRoute()
-const userRole = ref('candidate') //DEFAULT
-///////////////MONITOR/THE/CHANGE/IN/URL/////////////////////////////////////
-const updateUserRole = () => {userRole.value = route.path.split('/')[1] || ''}
+const router = useRouter()
+const authStore = useAuthStore()
+
+const userRole = ref('candidate')
+
+// Update role based on current path
+const updateUserRole = () => {
+  userRole.value = route.path.split('/')[1] || ''
+}
 watch(route, updateUserRole, { immediate: true })
 onMounted(updateUserRole)
-//////////////////////////////////////////////////////////////////////////////
+
+// Logout handler
+const logout = () => {
+  authStore.logout()
+  router.push('/login') // redirect to login page
+}
 </script>
+
 
 <style>
 .active-link {
