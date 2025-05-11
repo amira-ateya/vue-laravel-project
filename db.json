@@ -39,6 +39,16 @@
       "role": "candidate",
       "created_at": "2025-05-11T14:55:49.147Z",
       "updated_at": "2025-05-11T14:55:49.147Z"
+    },
+    {
+      "id": "1f91",
+      "name": "ali",
+      "email": "ali@gmail.com",
+      "password": "1234567",
+      "role": "employer",
+      "profile_picture": "blob:http://localhost:5173/73a87c1a-f41a-4a2e-8603-d5a342b5f1d7",
+      "created_at": "2025-05-11T20:01:55.337Z",
+      "updated_at": "2025-05-11T20:01:55.337Z"
     }
   ],
   "employers": [
@@ -52,6 +62,17 @@
       "phone": "0120000000000",
       "created_at": "2025-05-01T12:00:00Z",
       "updated_at": "2025-05-01T12:00:00Z"
+    },
+    {
+      "id": "4437",
+      "user_id": "1f91",
+      "company_name": "google",
+      "company_website": "https://www.youtube.com/watch?v=mspb_iKBoKQ",
+      "company_logo": "blob:http://localhost:5173/dd406299-053c-4ff2-ab80-33ff6b200c87",
+      "bio": "we are the best",
+      "phone": "0111111111",
+      "created_at": "2025-05-11T20:01:55.430Z",
+      "updated_at": "2025-05-11T20:01:55.430Z"
     }
   ],
   "candidates": [
