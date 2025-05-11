@@ -25,7 +25,7 @@ const routes = [
   {
     path: '/candidate',
     name: 'Candidate',  // Base route for candidate
-    component: { template: '<router-view />' },  // No component, just acts as a parent route
+    component: () => import('@/views/Candidate/candidateLayout.vue'),
     meta: { requiresAuth: true },
     children: [
       {
@@ -53,7 +53,7 @@ const routes = [
   {
     path: '/employer',
     name: 'Employer',  // Base route for employer
-    component: { template: '<router-view />' },  // No component, just acts as a parent route
+    component: ()=> import('@/views/Employer/employerLayout.vue'),
     meta: { requiresAuth: true },
     children: [
       {

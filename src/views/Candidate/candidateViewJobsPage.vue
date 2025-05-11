@@ -1,24 +1,19 @@
 <template>
   <div class="container-fluid">
-    <!-- Searhc Row -->
-    <SearchJob/>
-
-    <hr> <!-- horizintal line -->
+    <!-- Search Row -->
+    <SearchJob/> <hr> 
 
     <!-- Main Content Row -->
     <div class="row">
-      
+
       <!-- Filters -->
-      <div class="col-3">
-        <JobFilters @filter-changed="onFilterChanged" />
-      </div>
+      <div class="col-3"> <JobFilters @filter-changed="onFilterChanged" /> </div>
 
       <!-- Jobs -->
-      <div class="col">
-         <AvailableJobs />
-      </div>
+      <div class="col"> <AvailableJobs /> </div>
 
     </div>
+    
   </div>
 </template>
 
