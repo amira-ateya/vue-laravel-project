@@ -64,21 +64,25 @@
 
       <nav class="nav flex-column mt-2">
         <!-- settings -->
-        <router-link
-          :to="`/${userRole}/settings`"
-          :class="['nav-link d-flex align-items-center px-2 py-2', route.path === `/${userRole}/settings` ? 'active-link' : 'text-secondary']"
-        > <i class="fas fa-cog me-2"></i> Settings
-        </router-link>
-        <!-- help -->
-        <router-link
-          :to="`/${userRole}/help`"
-          :class="['nav-link d-flex align-items-center px-2 py-2', route.path === `/${userRole}/help` ? 'active-link' : 'text-secondary']"
-        > <i class="fas fa-question-circle me-2"></i> Help Center
-        </router-link>
+       <!-- settings -->
+<router-link
+  :to="`/${userRole}/settings`"
+  :class="['nav-link d-flex align-items-center px-2 py-2', route.path === `/${userRole}/settings` ? 'active-link' : 'text-secondary']"
+>
+  <i class="fas fa-cog me-2"></i> Settings
+</router-link>
+
+<!-- help -->
+<router-link
+  :to="`/${userRole}/help`"
+  :class="['nav-link d-flex align-items-center px-2 py-2', route.path === `/${userRole}/help` ? 'active-link' : 'text-secondary']"
+>
+  <i class="fas fa-question-circle me-2"></i> Help Center
+</router-link>
+
       </nav>
     </div>
-
-    <!-- USER INFO -->
+<!-- USER INFO -->
     <div class="d-flex align-items-center p-2 mt-4">
       <img src="https://i.pravatar.cc/40" class="rounded-circle me-2" alt="Avatar" width="40" height="40"> <!-- userimage -->
       <div>
