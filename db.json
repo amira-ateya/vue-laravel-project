@@ -59,7 +59,7 @@
   "jobs": [
     {
       "id": "1746876861218",
-      "title": "back end developer22",
+      "title": "back end developer2222",
       "work_type": "hybrid",
       "location": "minya ",
       "category": "programming",
@@ -77,6 +77,28 @@
       "benefits": [],
       "status": "active",
       "createdAt": "2025-05-10T11:34:21.218Z"
+    },
+    {
+      "id": "1746948204720",
+      "title": "php_laravel",
+      "work_type": "remote",
+      "location": "cc",
+      "category": "programming",
+      "salary_from": 100,
+      "salary_to": 200,
+      "deadline": "2025-05-28",
+      "description": "hh",
+      "responsibilities": [
+        "hello"
+      ],
+      "skills": [
+        "css",
+        "js",
+        "php"
+      ],
+      "benefits": [],
+      "status": "active",
+      "createdAt": "2025-05-11T07:23:24.720Z"
     }
   ],
   "category": [
