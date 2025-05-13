@@ -51,7 +51,7 @@
       "updated_at": "2025-05-11T20:01:55.337Z"
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "Company B",
       "email": "employerb@example.com",
       "password": "hashed-password",
@@ -61,7 +61,7 @@
       "updated_at": "2025-05-05T10:00:00Z"
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "Candidate B",
       "email": "candidateb@example.com",
       "password": "hashed-password",
@@ -74,7 +74,7 @@
   "employers": [
     {
       "id": "1",
-      "user_id": 2,
+      "user_id": "2",
       "company_name": "Company A",
       "company_website": "https://companya.com",
       "company_logo": null,
@@ -95,8 +95,8 @@
       "updated_at": "2025-05-11T20:01:55.430Z"
     },
     {
-      "id": 2,
-      "user_id": 4,
+      "id": "2",
+      "user_id": "4",
       "company_name": "Company B",
       "company_website": "https://companyb.com",
       "company_logo": null,
@@ -108,7 +108,7 @@
   "candidates": [
     {
       "id": "10",
-      "user_id": 3,
+      "user_id": "3",
       "resume": "/resumes/jerome-bell.pdf",
       "linkedin_profile": "https://linkedin.com/in/jeromebell",
       "phone_number": "+44 1245 572 135",
@@ -141,8 +141,8 @@
       "updated_at": "2025-05-11T14:55:49.147Z"
     },
     {
-      "id": 3,
-      "user_id": 5,
+      "id": "3",
+      "user_id": "5",
       "resume": "/resumes/jenny-wilson.pdf",
       "linkedin_profile": "https://linkedin.com/in/jennywilson",
       "phone_number": "+1 202-555-0175",
@@ -167,7 +167,7 @@
   "jobs": [
     {
       "id": "1",
-      "employer_id": 1,
+      "employer_id": "1",
       "title": "Frontend Developer",
       "description": "Build modern UI with Vue.",
       "responsibilities": [
@@ -181,8 +181,8 @@
         "CSS"
       ],
       "categories_id": [
-        1,
-        2
+        "1",
+        "2"
       ],
       "location": "Cairo",
       "technologies": [
@@ -191,7 +191,6 @@
         "Tailwind"
       ],
       "category": "programming",
-
       "work_type": "remote",
       "salary_from": 2000,
       "salary_to": 4000,
@@ -200,11 +199,10 @@
         "Bonuses"
       ],
       "salary_range": "2000-4000",
-    
       "deadline": "2025-06-01",
       "status": "approved",
       "candidates_id": [
-        1
+        "1"
       ],
       "created_at": "2025-05-01T12:00:00Z",
       "updated_at": "2025-05-01T12:00:00Z"
@@ -225,76 +223,14 @@
   "applications": [
     {
       "id": "1",
-      "job_id": 1,
-      "candidate_id": 1,
+      "job_id": "1",
+      "candidate_id": "1",
       "resume_snapshot": "/resumes/candidate-a.pdf",
       "contact_email": "candidate@example.com",
       "contact_phone": "01000000000",
       "status": "pending",
       "created_at": "2025-05-02T09:00:00Z",
       "updated_at": "2025-05-02T09:00:00Z"
-    },
-    {
-      "id": 3,
-      "job_id": 1,
-      "candidate_id": 2,
-      "resume_snapshot": "/resumes/candidate-a.pdf",
-      "contact_email": "candidate@example.com",
-      "contact_phone": "01000000000",
-      "status": "Accepted",
-      "created_at": "2025-05-02T09:00:00Z",
-      "updated_at": "2025-05-02T09:00:00Z"
-    },
-    {
-      "id": 4,
-      "job_id": 1,
-      "candidate_id": 1,
-      "resume_snapshot": "/resumes/candidate-a.pdf",
-      "contact_email": "candidate@example.com",
-      "contact_phone": "01000000000",
-      "status": "rejected",
-      "created_at": "2025-05-02T09:00:00Z",
-      "updated_at": "2025-05-02T09:00:00Z"
-    }
-  ],
-  "comments": [
-    {
-      "id": "1",
-      "job_id": 1,
-      "user_id": 3,
-      "comment_text": "Is this position still open?",
-      "created_at": "2025-05-02T10:00:00Z",
-      "updated_at": "2025-05-02T10:00:00Z"
-    }
-  ],
-  "job_analytics": [
-    {
-      "id": "1",
-      "job_id": 1,
-      "views_count": 150,
-      "applications_count": 12,
-      "created_at": "2025-05-01T12:00:00Z",
-      "updated_at": "2025-05-03T12:00:00Z"
-    }
-  ],
-  "payments": [
-    {
-      "id": "1",
-      "application_id": 1,
-      "employer_id": 1,
-      "amount": 50,
-      "payment_method": "paypal",
-      "status": "paid",
-      "created_at": "2025-05-03T12:00:00Z",
-      "updated_at": "2025-05-03T12:00:00Z"
-    }
-  ],
-  "job_filters": [
-    {
-      "id": "1",
-      "user_id": 3,
-      "filters_json": "{\"category\": \"programming\", \"location\": \"Remote\"}",
-      "created_at": "2025-05-02T10:00:00Z"
     }
   ]
 }
