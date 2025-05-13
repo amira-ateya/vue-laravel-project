@@ -1,7 +1,7 @@
 {
   "users": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Admin User",
       "email": "admin@example.com",
       "password": "hashed-password",
@@ -11,7 +11,7 @@
       "updated_at": "2025-05-01T12:00:00Z"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Company A",
       "email": "employer@example.com",
       "password": "hashed-password",
@@ -21,7 +21,7 @@
       "updated_at": "2025-05-01T12:00:00Z"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Candidate A",
       "email": "candidate@example.com",
       "password": "hashed-password",
@@ -29,6 +29,26 @@
       "profile_picture": null,
       "created_at": "2025-05-01T12:00:00Z",
       "updated_at": "2025-05-01T12:00:00Z"
+    },
+    {
+      "id": "fa66",
+      "fullName": "ahmed",
+      "email": "ahmed@gmail.com",
+      "password": "123456789",
+      "profile_picture": "blob:http://localhost:5173/881f0cc0-c524-495c-8077-f11c6ef39665",
+      "role": "candidate",
+      "created_at": "2025-05-11T14:55:49.147Z",
+      "updated_at": "2025-05-11T14:55:49.147Z"
+    },
+    {
+      "id": "1f91",
+      "name": "ali",
+      "email": "ali@gmail.com",
+      "password": "1234567",
+      "role": "employer",
+      "profile_picture": "blob:http://localhost:5173/73a87c1a-f41a-4a2e-8603-d5a342b5f1d7",
+      "created_at": "2025-05-11T20:01:55.337Z",
+      "updated_at": "2025-05-11T20:01:55.337Z"
     },
     {
       "id": 4,
@@ -53,14 +73,26 @@
   ],
   "employers": [
     {
-      "id": 1,
+      "id": "1",
       "user_id": 2,
       "company_name": "Company A",
       "company_website": "https://companya.com",
       "company_logo": null,
       "bio": "We are a software company.",
+      "phone": "0120000000000",
       "created_at": "2025-05-01T12:00:00Z",
       "updated_at": "2025-05-01T12:00:00Z"
+    },
+    {
+      "id": "4437",
+      "user_id": "1f91",
+      "company_name": "google",
+      "company_website": "https://www.youtube.com/watch?v=mspb_iKBoKQ",
+      "company_logo": "blob:http://localhost:5173/dd406299-053c-4ff2-ab80-33ff6b200c87",
+      "bio": "we are the best",
+      "phone": "0111111111",
+      "created_at": "2025-05-11T20:01:55.430Z",
+      "updated_at": "2025-05-11T20:01:55.430Z"
     },
     {
       "id": 2,
@@ -75,7 +107,7 @@
   ],
   "candidates": [
     {
-      "id": 2,
+      "id": "10",
       "user_id": 3,
       "resume": "/resumes/jerome-bell.pdf",
       "linkedin_profile": "https://linkedin.com/in/jeromebell",
@@ -96,6 +128,17 @@
       "skills": "Project Management, Copywriting, English",
       "created_at": "2025-05-01T12:00:00Z",
       "updated_at": "2025-05-01T12:00:00Z"
+    },
+    {
+      "id": "a39e",
+      "user_id": "fa66",
+      "resume": "blob:http://localhost:5173/abb6714f-d46f-467e-917a-6dc0ec826e92",
+      "linkedin_profile": "https://www.linkedin.com/feed/",
+      "phone_number": "1111111111111",
+      "experience_level": "Mid Level",
+      "location": "fghjhgfdfghj",
+      "created_at": "2025-05-11T14:55:49.147Z",
+      "updated_at": "2025-05-11T14:55:49.147Z"
     },
     {
       "id": 3,
@@ -123,150 +166,67 @@
   ],
   "jobs": [
     {
-      "id": 1,
+      "id": "1",
       "employer_id": 1,
       "title": "Frontend Developer",
       "description": "Build modern UI with Vue.",
-      "responsibilities": "Develop and maintain frontend.",
-      "skills": "Vue, JavaScript, CSS",
-      "category": "programming",
-      "location": "Remote",
-      "technologies": "Vue.js, Pinia, Tailwind",
-      "work_type": "remote",
-      "salary_range": "2000-4000",
-      "benefits": "Health insurance, Bonuses",
-      "deadline": "2025-06-01",
-      "status": "approved",
-      "created_at": "2025-05-01T12:00:00Z",
-      "updated_at": "2025-05-01T12:00:00Z"
-    },
-    {
-      "id": 2,
-      "employer_id": 1,
-      "title": "Backend Developer",
-      "description": "Build modern UI with Vue.",
-      "responsibilities": "Develop and maintain frontend.",
-      "skills": "Vue, JavaScript, CSS",
-      "category": "programming",
-      "location": "Remote",
-      "technologies": "Vue.js, Pinia, Tailwind",
-      "work_type": "remote",
-      "salary_range": "2000-4000",
-      "benefits": "Health insurance, Bonuses",
-      "deadline": "2025-06-01",
-      "status": "pending",
-      "created_at": "2025-05-01T12:00:00Z",
-      "updated_at": "2025-05-01T12:00:00Z"
-    },
-    {
-      "id": 3,
-      "employer_id": 3,
-      "title": "FullStack Developer",
-      "description": "Build modern UI with Vue.",
-      "responsibilities": "Develop and maintain frontend.",
-      "skills": "Vue, JavaScript, CSS",
-      "category": "programming",
-      "location": "Remote",
-      "technologies": "Vue.js, Pinia, Tailwind",
-      "work_type": "remote",
-      "salary_range": "2000-4000",
-      "benefits": "Health insurance, Bonuses",
-      "deadline": "2025-06-01",
-      "status": "approved",
-      "created_at": "2025-05-01T12:00:00Z",
-      "updated_at": "2025-05-01T12:00:00Z"
-    },
-    {
-      "id": 4,
-      "employer_id": 3,
-      "title": "Backend Developer",
-      "description": "Build modern UI with Vue.",
-      "responsibilities": "Develop and maintain frontend.",
-      "skills": "Vue, JavaScript, CSS",
-      "category": "programming",
-      "location": "Remote",
-      "technologies": "Vue.js, Pinia, Tailwind",
-      "work_type": "remote",
-      "salary_range": "2000-4000",
-      "benefits": "Health insurance, Bonuses",
-      "deadline": "2025-06-01",
-      "status": "approved",
-      "created_at": "2025-05-01T12:00:00Z",
-      "updated_at": "2025-05-01T12:00:00Z"
-    },
-    {
-      "id": 5,
-      "employer_id": 2,
-      "title": "UI/UX Designer",
-      "description": "Create user-centered designs for web and mobile apps.",
-      "responsibilities": "Design UI elements and tools.",
-      "skills": "Figma, UX Research, Prototyping",
-      "category": "design",
-      "location": "New York, USA",
-      "technologies": "Figma, Adobe XD",
-      "work_type": "on-site",
-      "salary_range": "3000-5000",
-      "benefits": "Gym membership, Paid vacations",
-      "deadline": "2025-06-15",
-      "status": "approved",
-      "created_at": "2025-05-05T10:00:00Z",
-      "updated_at": "2025-05-05T10:00:00Z"
-    },
-    {
-      "id": 6,
-      "employer_id": 2,
-      "title": "DevOps Engineer",
-      "description": "Manage and improve CI/CD pipelines.",
-      "responsibilities": "Automate infrastructure and deployments.",
-      "skills": "AWS, Docker, Jenkins",
-      "category": "devops",
-      "location": "Remote",
-      "technologies": "Terraform, Docker, AWS",
-      "work_type": "remote",
-      "salary_range": "4000-6000",
-      "benefits": "Remote work, Stock options",
-      "deadline": "2025-06-20",
-      "status": "pending",
-      "created_at": "2025-05-05T10:00:00Z",
-      "updated_at": "2025-05-05T10:00:00Z"
-    },
-    {
-      "id": "1747059029822",
-      "title": "kdjjeje",
-      "work_type": "remote",
-      "location": "qkjenfdk",
-      "category": "programming",
-      "salary_from": 333,
-      "salary_to": 23445,
-      "deadline": "2025-05-20",
-      "description": "iicdc",
       "responsibilities": [
-        "onhdfiafc"
+        "Develop and maintain frontend.",
+        "Help other junior frontend developers",
+        "some kind of staff to do"
       ],
       "skills": [
-        "lamfdla"
+        "Vue",
+        "JavaScript",
+        "CSS"
       ],
-      "benefits": [],
+      "categories_id": [
+        1,
+        2
+      ],
+      "location": "Cairo",
+      "technologies": [
+        "Vue.js",
+        "Pinia",
+        "Tailwind"
+      ],
+      "category": "programming",
+
+      "work_type": "remote",
+      "salary_from": 2000,
+      "salary_to": 4000,
+      "benefits": [
+        "Health insurance",
+        "Bonuses"
+      ],
+      "salary_range": "2000-4000",
+    
+      "deadline": "2025-06-01",
       "status": "approved",
-      "createdAt": "2025-05-12T14:10:29.822Z"
+      "candidates_id": [
+        1
+      ],
+      "created_at": "2025-05-01T12:00:00Z",
+      "updated_at": "2025-05-01T12:00:00Z"
+    }
+  ],
+  "category": [
+    {
+      "id": "1",
+      "category_name": "programming",
+      "category_description": "for programmers who are frontend or backend or ai engineers..etc"
+    },
+    {
+      "id": "2",
+      "category_name": "Sales",
+      "category_description": "for Sales for some kind of people"
     }
   ],
   "applications": [
     {
-      "id": 1,
-      "job_id": "1747059029822",
-      "candidate_id": 2,
-      "resume_snapshot": "/resumes/candidate-a.pdf",
-      "contact_email": "candidate@example.com",
-      "contact_phone": "01000000000",
-      "status": "pending",
-      "created_at": "2025-05-02T09:00:00Z",
-      "updated_at": "2025-05-02T09:00:00Z"
-    },
-    {
-      "id": 2,
-      "job_id": 2,
-      "candidate_id": 3,
+      "id": "1",
+      "job_id": 1,
+      "candidate_id": 1,
       "resume_snapshot": "/resumes/candidate-a.pdf",
       "contact_email": "candidate@example.com",
       "contact_phone": "01000000000",
@@ -299,7 +259,7 @@
   ],
   "comments": [
     {
-      "id": 1,
+      "id": "1",
       "job_id": 1,
       "user_id": 3,
       "comment_text": "Is this position still open?",
@@ -309,7 +269,7 @@
   ],
   "job_analytics": [
     {
-      "id": 1,
+      "id": "1",
       "job_id": 1,
       "views_count": 150,
       "applications_count": 12,
@@ -319,7 +279,7 @@
   ],
   "payments": [
     {
-      "id": 1,
+      "id": "1",
       "application_id": 1,
       "employer_id": 1,
       "amount": 50,
@@ -331,7 +291,7 @@
   ],
   "job_filters": [
     {
-      "id": 1,
+      "id": "1",
       "user_id": 3,
       "filters_json": "{\"category\": \"programming\", \"location\": \"Remote\"}",
       "created_at": "2025-05-02T10:00:00Z"
