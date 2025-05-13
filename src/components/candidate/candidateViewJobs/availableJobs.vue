@@ -19,6 +19,8 @@
         <div class="d-flex">
           <!-- company logo -->
           <div class="me-4">
+
+            <p>img: {{getEmployerLogo(job.employer_id)}}</p>
             <img
               :src="getEmployerLogo(job.employer_id)"
               alt="company logo"
@@ -90,7 +92,7 @@ onMounted(async () => {
 // Helper to get logo from employer ID
 const getEmployerLogo = (employerId) => {
   const employer = employerStore.employers.find(e => e.id === employerId)
-  return employer?.company_logo || 'https://cdn-icons-png.flaticon.com/128/300/300221.png' // fallback image
+  return employer?.company_logo || '' // fallback image
 }
 
 </script>

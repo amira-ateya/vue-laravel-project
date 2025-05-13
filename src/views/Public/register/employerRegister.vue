@@ -6,7 +6,7 @@
     <!-- Form Section -->
     <div class="container d-flex align-items-center justify-content-center">
       <div class="w-100" style="max-width: 700px;">
-        <h1 class="text-center fw-bold mb-4">Jus a Step to Go</h1>
+        <h1 class="text-center fw-bold mb-4">Just a Step to Go</h1>
 
         <!-- Profile and Logo Upload -->
         <div class="d-flex justify-content-between mb-4">
@@ -106,9 +106,11 @@
           </div>
         </div>
 
-
         <!-- Submit Button -->
-        <button class="btn bg-purple text-white fw-bold w-100 p-3 mt-3" @click="handleEmployerSubmit">
+        <button
+          class="btn bg-purple text-white fw-bold w-100 p-3 mt-3"
+          @click="handleEmployerSubmit"
+        >
           Submit Company Profile
         </button>
       </div>
@@ -117,28 +119,28 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRegisterStore } from '@/stores/registerStore'
 import { useUserStore } from '@/stores/userStore'
 import { useEmployerStore } from '@/stores/employerStore'
+import { useImageStore } from '@/stores/imageStore'
 import { useRouter } from 'vue-router'
 
 const registerStore = useRegisterStore()
 const userStore = useUserStore()
 const employerStore = useEmployerStore()
+const imageStore = useImageStore()
 const router = useRouter()
 
 onMounted(() => {
   const { fullName, email, password } = registerStore.step1Data
 
-  console.log("fulll name = ", fullName);
+  console.log("full name = ", fullName);
 
   if (!fullName || !email || !password) {
     router.push('/register')
   }
 })
-
-
 
 // Local form data
 const companyName = ref('')
@@ -146,47 +148,62 @@ const companyBio = ref('')
 const location = ref('')
 const website = ref('')
 const phone = ref('')
-const profileImageUrl = ref(null)
-const companyLogoUrl = ref(null)
 const submitted = ref(false)
 
 // Default images
 const defaultProfileImage = "https://cdn-icons-png.flaticon.com/512/847/847969.png"
 const defaultCompanyLogo = 'https://images.ui8.net/uploads/3_1615170250124.png'
 
+// Get image URLs from the store
+const profileImageUrl = computed(() => imageStore.profileImageUrl)
+const companyLogoUrl = computed(() => imageStore.companyLogoUrl)
+
 // Handle image uploads
 const handleProfileImageUpload = (e) => {
   const file = e.target.files[0]
-  if (file) profileImageUrl.value = URL.createObjectURL(file)
+  if (file) {
+    if (file.size > 5000000) {
+      alert('Image size must be less than 5MB')
+      return
+    }
+    imageStore.uploadProfileImage(file)
+  }
 }
 
 const handleLogoUpload = (e) => {
   const file = e.target.files[0]
-  if (file) companyLogoUrl.value = URL.createObjectURL(file)
+  if (file) {
+    if (file.size > 5000000) {
+      alert('Image size must be less than 5MB')
+      return
+    }
+    imageStore.uploadCompanyLogo(file)
+  }
 }
-
 
 function isValidPhone(value) {
-  return /^\d+$/.test(value) // only digits, no letters, no special characters
+  return /^[+]?[0-9]{10,15}$/.test(value) // Validates phone numbers like +1234567890 or 1234567890
 }
 
+// Form validation
+const isFormValid = computed(() => {
+  return (
+    companyName.value &&
+    companyBio.value &&
+    location.value &&
+    website.value &&
+    phone.value &&
+    isValidPhone(phone.value)
+  )
+})
 
 // Submit handler
 const handleEmployerSubmit = async () => {
   submitted.value = true
 
-
-  if (
-  !companyName.value ||
-  !companyBio.value ||
-  !location.value ||
-  !website.value ||
-  !phone.value ||
-  !isValidPhone(phone.value)
-) {
-  return
-}
-
+  if (!isFormValid.value) {
+    return
+  }
 
   try {
     const step1Data = registerStore.step1Data
@@ -216,7 +233,7 @@ const handleEmployerSubmit = async () => {
 
     await employerStore.createEmployer(employerPayload)
 
-    registerStore.clearData()
+    // No form reset here, just routing
     router.push('/login')
   } catch (error) {
     console.error('Error creating employer:', error)
