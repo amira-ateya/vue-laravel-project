@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import axios from 'axios'
 
-// Define the User type
 interface User {
   id: string;                   
   name: string;                 

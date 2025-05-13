@@ -19,7 +19,7 @@ export const useAuthStore = defineStore('auth', {
       const token = await new SignJWT(payload)
         .setProtectedHeader({ alg: 'HS256' })
         .setIssuedAt()
-        .setExpirationTime('1h')
+        .setExpirationTime('4h')
         .sign(secret)
 
       localStorage.setItem('token', token)
