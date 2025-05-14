@@ -44,8 +44,8 @@
           </router-link>
           <!-- employer manage jobs -->
           <router-link
-            to="/employer/all-applicants"
-            :class="['nav-link d-flex align-items-center px-2 py-2', route.path === '/employer/all-applicants' ? 'active-link' : 'text-secondary']"
+            to="/employer/applications"
+            :class="['nav-link d-flex align-items-center px-2 py-2', route.path === '/employer/applications' ? 'active-link' : 'text-secondary']"
           > <i class="fas fa-briefcase me-2"></i> All Applicants
           </router-link>
           <!-- employer view applicants -->

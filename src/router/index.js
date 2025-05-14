@@ -21,47 +21,34 @@ import Welcome from '@/components/welcome.vue'
   import EmployerRegister from '@/views/Public/register/employerRegister.vue'
 
 
-  // candidate
+  // candidate [ profile + findJobs + applyPage + (apply control)]
   import CandidateApplication from '@/views/Candidate/candidateApplication.vue'
   import CandidatePublicProfile from '@/views/Candidate/candidatePublicProfile.vue'
   import CandidateViewJobsPage from '@/views/Candidate/candidateViewJobsPage.vue'
 
-  // employer
+  // employer [ viewAllApplicant, jobListingPage ]
   import AllApplicantsPage from '@/views/Employer/allApplicantsPage.vue'
   import JobListingPage from '@/views/Employer/jobListingPage.vue'
+
+  // NEW IMPORT
+  // [REPEAT] import ApplicationDetails from '@/views/Employer/ApplicationDetails.vue'
 
 
 
 const routes = [
+
+  // AUTH
   { path: '/', name: 'welcome', component: Welcome },
   { path: '/login', name: 'Login', component: Login },
   { path: '/register', name: 'Register', component: Register },
   { path: '/candidateRegister', name: 'ContiureRegisterCandidate', component: CandidateRegister },
   { path: '/employerRegister', name: 'ContiureRegisterEmployer', component: EmployerRegister },
 
-  // SOLO ROUTE ADDED
-  {
-    path: '/applications/:id',
-    name: 'application-details',
-    component: () => import('@/views/Employer/ApplicationDetails.vue'),
-    props: true
-  },
-  // SOLO ROUTE ADDED
-  {
-    path: '/test',
-    name: 'test',
-    component: CandidateViewJobsPage
-  },
-  // SOLO ROUTE ADDED
-  {
-    path: '/:pathMatch(.*)*',
-    redirect: '/'
-  },
-
-  // Candidate Routes (Require Auth)
+  
+  // CANDIDATE
   {
     path: '/candidate',
-    name: 'Candidate',  // Base route for candidate
+    name: 'Candidate',
     component: () => import('@/views/Candidate/candidateLayout.vue'),
     meta: { requiresAuth: true },
     children: [
@@ -86,7 +73,7 @@ const routes = [
     ]
   },
 
-  // Employer Routes (Require Auth)
+  // EMPLOYER
   {
     path: '/employer',
     name: 'Employer',  
@@ -94,11 +81,19 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
 
+      // view specific application on job
+      {
+        path: 'applications/:id',
+        name: 'application-details',
+        component: () => import('@/views/Employer/ApplicationDetails.vue'),
+        props: true
+      },
+
       // employer dashboard added
       {
         path: 'dashboard',
         name: 'EmployerDashboard',
-        component: JobListingPage,
+        component: () => import('@/views/Employer/Dashboard.vue'),
         meta: { requiresAuth: true, role: 'employer' }
       },
       // another employer dashboard added
@@ -150,13 +145,7 @@ const routes = [
         name: 'EmployerJobListing',
         component: JobListingPage,
         meta: { requiresAuth: true }
-      },
-      {
-        path: 'all-applicants',
-        name: 'EmployerViewAllApplicants',
-        component: AllApplicantsPage,
-        meta: { requiresAuth: true }
-      },
+      }
     ]
   }
 ]
