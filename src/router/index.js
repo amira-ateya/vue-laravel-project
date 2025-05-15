@@ -25,6 +25,10 @@ import Welcome from '@/components/welcome.vue'
   import CandidateApplication from '@/views/Candidate/candidateApplication.vue'
   import CandidatePublicProfile from '@/views/Candidate/candidatePublicProfile.vue'
   import CandidateViewJobsPage from '@/views/Candidate/candidateViewJobsPage.vue'
+  import CandidateJobDetails from '@/views/Candidate/candidateJobDetails.vue' //amira work added
+  import candidateApplyModel from '@/views/Candidate/candidateApplyModel.vue' //amira work added
+
+
 
   // employer [ viewAllApplicant, jobListingPage ]
   import AllApplicantsPage from '@/views/Employer/allApplicantsPage.vue'
@@ -70,10 +74,20 @@ const routes = [
         component: CandidatePublicProfile,
         meta: { requiresAuth: true }
       },
-      // { 
-      //   path: 'jobDetails',
-      //   name: 'CandidatejobDetails',
-      //   component: CandidateJobDetails},
+      // adding the apply modal for the job;
+      {
+        path: 'apply',
+        name: 'applyModal',
+        component: candidateApplyModel
+      },
+
+
+      // adding the job details page for candidate
+      {
+        path: 'jobs/:id',
+        name: 'CandidatejobDetails',
+        component: CandidateJobDetails
+      },
     ]
   },
 

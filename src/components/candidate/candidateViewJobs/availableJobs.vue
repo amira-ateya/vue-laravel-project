@@ -48,7 +48,7 @@
         <div style="width: 200px;" class="d-flex flex-column justify-content-between gap-3">
 
           <!-- BUTTON--------------------------------------------------------------------------------- -->
-          <button class="btn w-100 rounded-0 px-5 py-3 fw-bold fs-5 bg-purple text-white">Apply</button>
+          <button class="btn w-100 rounded-0 px-5 py-3 fw-bold fs-5 bg-purple text-white" @click="goToJobDetails(job.id)">Apply</button>
           <!------------------------------------------------------------------------------------------ -->
 
           <div class="progress">
@@ -68,19 +68,17 @@
 </template>
 
 <script setup>
-// imports
-import { onMounted, computed } from 'vue'
+import { onMounted } from 'vue'
 import { useJobStore } from '@/stores/jobStore.js'
 import { useCategoryStore } from '@/stores/categoryStore'
 import { useEmployerStore } from '@/stores/employerStore'
-import { useRoute } from 'vue-router'
+import { useRouter } from 'vue-router' 
 
-// variables
 const jobStore = useJobStore()
 const categoryStore = useCategoryStore()
 const employerStore = useEmployerStore()
+const router = useRouter() 
 
-// fetch on mount
 onMounted(async () => {
   await Promise.all([
     jobStore.fetchJobs(),
@@ -89,17 +87,16 @@ onMounted(async () => {
   ])
 })
 
-//-BUTTON---------------
-// const goToJobDetails = () => useRoute().push('/candidate/')
-//----------------------
+// for navigation
+const goToJobDetails = (id) => router.push(`/candidate/jobs/${id}`)
 
-// Helper to get logo from employer ID
+// Get employer logo
 const getEmployerLogo = (employerId) => {
   const employer = employerStore.employers.find(e => e.id === employerId)
-  return employer?.company_logo || 'https://cdn-icons-png.flaticon.com/128/300/300221.png' // fallback image
+  return employer?.company_logo || 'https://cdn-icons-png.flaticon.com/128/300/300221.png'
 }
-
 </script>
+
 
 
 

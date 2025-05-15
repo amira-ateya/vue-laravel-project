@@ -8,8 +8,8 @@
             <h2 v-if="pageSection === 'applications'">My Applications</h2>
             <h2 v-else-if="pageSection === 'jobs'">Find Jobs</h2>
             <h2 v-else-if="pageSection === 'profile'">My Public Profile</h2>
+            <h2 v-else-if="pageSection === 'job'">Job Details</h2>            
             <h2 v-else>404 NOT FOUND</h2>
-            <!-- FOR EMPOLOYER -->
         
         </div>
 

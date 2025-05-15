@@ -1,14 +1,25 @@
 <template>
-  
-  <div class="container-fluid d-flex">
-    <!-- Show only if NOT on login or register paths -->
-    <Dashboard v-if="!isAuthPage" />
-    <div class="container-fluid d-flex flex-column p-0">
-      <HeaderPerPage v-if="!isAuthPage" />
-      <RouterView />
+  <div class="app-layout d-flex">
+    
+    <!-- SIDEBAR (Fixed Left) -->
+    <Dashboard v-if="!isAuthPage" class="sidebar" />
+
+    <!-- RIGHT SIDE: HEADER + CONTENT -->
+    <div class="main-content d-flex flex-column flex-grow-1">
+      
+      <!-- HEADER (Fixed Top) -->
+      <HeaderPerPage v-if="!isAuthPage" class="header" />
+
+      <!-- CONTENT (Scrollable) -->
+      <div class="page-content flex-grow-1 overflow-auto">
+        <RouterView />
+      </div>
+      
     </div>
+    
   </div>
 </template>
+
 
 <script setup>
 import { useRoute } from 'vue-router';
@@ -26,3 +37,6 @@ const isAuthPage = computed(() => {
 });
 
 </script>
+
+
+
