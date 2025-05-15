@@ -105,6 +105,12 @@
       "updated_at": "2025-05-05T10:00:00Z"
     }
   ],
+
+
+
+
+
+  
   "candidates": [
     {
       "id": "10",
@@ -164,6 +170,11 @@
       "updated_at": "2025-05-05T10:00:00Z"
     }
   ],
+
+
+
+
+
   "jobs": [
     {
       "id": "1",
@@ -180,17 +191,13 @@
         "JavaScript",
         "CSS"
       ],
-      "categories_id": [
-        "1",
-        "2"
-      ],
       "location": "Cairo",
       "technologies": [
         "Vue.js",
         "Pinia",
         "Tailwind"
       ],
-      "category": "programming",
+      "category": "1",
       "work_type": "remote",
       "salary_from": 2000,
       "salary_to": 4000,
@@ -212,7 +219,7 @@
       "title": "back end developer using laravel",
       "work_type": "hybrid",
       "location": "alex",
-      "category": "programming",
+      "category": "2",
       "salary_from": 2000,
       "salary_to": 4000,
       "deadline": "2001-02-01",
@@ -246,11 +253,17 @@
       "category_description": "for Sales for some kind of people"
     }
   ],
+
+
+
+
+
+
   "applications": [
     {
       "id": "1",
       "job_id": "1",
-      "candidate_id": "1",
+      "candidate_id": "3",
       "resume_snapshot": "/resumes/candidate-a.pdf",
       "contact_email": "candidate@example.com",
       "contact_phone": "01000000000",

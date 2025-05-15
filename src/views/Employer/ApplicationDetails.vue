@@ -64,7 +64,7 @@
           <div class="application-actions">
             <button 
               @click="changeStatus('accepted')" 
-              :disabled="application.status === 'accepted'"
+              :disabled="application.status == 'accepted'"
               class="action-button accept"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -74,7 +74,7 @@
             </button>
             <button 
               @click="changeStatus('rejected')" 
-              :disabled="application.status === 'rejected'"
+              :disabled="application.status == 'rejected'"
               class="action-button reject"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -102,7 +102,7 @@
             v-for="tab in tabs" 
             :key="tab.id"
             @click="activeTab = tab.id"
-            :class="{ active: activeTab === tab.id }"
+            :class="{ active: activeTab == tab.id }"
             class="tab-button"
           >
             {{ tab.label }}
@@ -112,7 +112,7 @@
         <!-- Tab content -->
         <div class="tab-content">
           <!-- Candidate Information -->
-          <div v-if="activeTab === 'info'" class="tab-pane">
+          <div v-if="activeTab == 'info'" class="tab-pane">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div class="info-section">
                 <h3>Personal Information</h3>
@@ -166,7 +166,7 @@
           </div>
 
           <!-- Job Information -->
-          <div v-if="activeTab === 'job'" class="tab-pane">
+          <div v-if="activeTab == 'job'" class="tab-pane">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div class="info-section">
                 <h3>Job Details</h3>
@@ -225,12 +225,12 @@
           </div>
 
           <!-- Resume Preview -->
-          <div v-if="activeTab === 'resume'" class="tab-pane">
+          <div v-if="activeTab == 'resume'" class="tab-pane">
             <ResumeViewer :resumeUrl="application.resume_snapshot" />
           </div>
 
           <!-- Activity Timeline -->
-          <div v-if="activeTab === 'activity'" class="tab-pane">
+          <div v-if="activeTab == 'activity'" class="tab-pane">
             <ApplicationTimeline :applicationId="application.id" />
           </div>
         </div>
@@ -243,14 +243,14 @@
           <div class="action-buttons">
             <button 
               @click="changeStatus('accepted')" 
-              :disabled="application.status === 'accepted'"
+              :disabled="application.status == 'accepted'"
               class="sidebar-button accept"
             >
               Accept Application
             </button>
             <button 
               @click="changeStatus('rejected')" 
-              :disabled="application.status === 'rejected'"
+              :disabled="application.status == 'rejected'"
               class="sidebar-button reject"
             >
               Reject Application
@@ -297,16 +297,19 @@
 </template>
 
 <script setup>
+// imports
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useApplicationStore } from '@/stores/applicationStore'
+import { useApplicationStore } from '@/stores/applicationStore.js'
 import StatusChip from '@/components/employer/Applications/StatusChip.vue'
 import ApplicationTimeline from '@/components/employer/Applications/ApplicationTimeline.vue'
 import ResumeViewer from '@/components/employer/Applications/ResumeViewer.vue'
 
+// variables
 const route = useRoute()
-const router = useRouter()
 const applicationStore = useApplicationStore()
+
+console.log("applicationStore  = ", applicationStore); //debug
 
 const application = ref(null)
 const loading = ref(true)
@@ -321,23 +324,34 @@ const tabs = [
 ]
 
 const candidateInitial = computed(() => {
+  console.log("hello in computedd section"); // debug
   return application.value?.candidate?.name?.charAt(0).toUpperCase() || ''
 })
 
+
+// FETACH APPLICATION
 const fetchApplication = async () => {
+
   try {
     loading.value = true
     error.value = null
     const appId = parseInt(route.params.id)
+
+
+    console.log("applicationStoer.application.length = ", applicationStore.applications.length ); //debug
     
     // جلب جميع البيانات أولاً إذا لم تكن محملة
-    if (applicationStore.applications.length === 0) {
+    if (applicationStore.applications.length == 0) {
       await applicationStore.fetchApplications()
     }
     
+    console.log("before fetching the application..."); //debug
+
     application.value = applicationStore.getApplicationById(appId)
+
     
     if (!application.value) {
+      console.log("application.value = ", application.value); // debug
       throw new Error('Application not found')
     }
     
@@ -353,6 +367,9 @@ const fetchApplication = async () => {
     loading.value = false
   }
 }
+
+console.log("hello in applicaiont details") //debug
+
 
 const formatDate = (dateString) => {
   if (!dateString) return 'N/A'

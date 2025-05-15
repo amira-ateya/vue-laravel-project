@@ -12,6 +12,7 @@
 
     <!-- Looping through jobs -->
     <div v-for="job in jobStore.jobs" :key="job.id">
+
       <!-- JOB CARD -->
       <div class="border p-4 d-flex justify-content-between align-items-center my-3">
 
@@ -70,7 +71,7 @@
 
 <script setup>
 import { onMounted, computed } from 'vue'
-import { useJobStore } from '@/stores/jobStore'
+import { useJobStore } from '@/stores/jobStore.js'
 import { useCategoryStore } from '@/stores/categoryStore'
 import { useEmployerStore } from '@/stores/employerStore'
 

@@ -36,7 +36,7 @@ onMounted(() => {
 })
   import { useEmployerStore } from '@/stores/employerStore'
   import { useJobStore } from '@/stores/jobStore'
-  import { useApplicationStore } from '@/stores/applicationStore.ts'
+  import { useApplicationStore } from '@/stores/applicationStore'
   import StatsCard from '@/components/employer/StatsCard.vue'
   import RecentJobs from '@/components/employer/RecentJobs.vue'
   import RecentApplications from '@/components/employer/RecentApplications.vue'
