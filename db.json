@@ -206,6 +206,32 @@
       ],
       "created_at": "2025-05-01T12:00:00Z",
       "updated_at": "2025-05-01T12:00:00Z"
+    },
+    {
+      "id": "1747298358035",
+      "title": "back end developer using laravel",
+      "work_type": "hybrid",
+      "location": "alex",
+      "category": "programming",
+      "salary_from": 2000,
+      "salary_to": 4000,
+      "deadline": "2001-02-01",
+      "description": "we need a backe end developer know html and css and js using laravel framework and can work under presssure",
+      "responsibilities": [
+        "- know how to run teh editor",
+        "know how to play tennis so he can reply on his employers",
+        "have a good thought about the launch time",
+        "can work from the dream on his bed"
+      ],
+      "skills": [
+        "programming",
+        "html",
+        "css",
+        "js"
+      ],
+      "benefits": [],
+      "status": "active",
+      "createdAt": "2025-05-15T08:39:18.035Z"
     }
   ],
   "category": [

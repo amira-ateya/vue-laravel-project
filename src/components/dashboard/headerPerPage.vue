@@ -40,7 +40,7 @@
             <!-- buttons -->
             <div class="d-flex justify-content-center align-items-center">
                 <a href="#"><i class="fa-regular fa-bell fa-2x"></i></a> <!-- notify -->
-                <button class="btn btn-primary rounded-0 ms-4">+ Post a Job</button> <!-- add post -->
+                <a href="/employer/post-job" class="btn btn-primary rounded-0 ms-4">+ Post a Job</a> <!-- add post -->
             </div>
 
 
