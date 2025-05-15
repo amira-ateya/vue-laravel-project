@@ -38,21 +38,18 @@
 
               <!-- Categories -->
                 <span class="badge border rounded-pill me-2 border-text-purple" style="font-size: 1.1rem; padding: 0.5em 0.9em;">
-                  {{ categoryStore.getCategoryNameById(job.categories_id[0]) }}
+                  {{ categoryStore.getCategoryNameById(job.category) }}
                 </span>
-
-
-                <span class="badge border rounded-pill me-2 border-text-yellow" style="font-size: 1.1rem; padding: 0.5em 0.9em;">
-                  {{ categoryStore.getCategoryNameById(job.categories_id[1]) }}
-                </span>
-
             </span>
           </div>
         </div>
 
         <!-- Right side: apply button + progress + applicants -->
         <div style="width: 200px;" class="d-flex flex-column justify-content-between gap-3">
+
+          <!-- BUTTON--------------------------------------------------------------------------------- -->
           <button class="btn w-100 rounded-0 px-5 py-3 fw-bold fs-5 bg-purple text-white">Apply</button>
+          <!------------------------------------------------------------------------------------------ -->
 
           <div class="progress">
             <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
@@ -62,6 +59,7 @@
             <span class="fw-bold">{{ job.candidates_id?.length || 0 }} applied</span> 
             <span class="text-secondary"> of 10 capacity</span>
           </div>
+
         </div>
 
       </div>
@@ -70,16 +68,19 @@
 </template>
 
 <script setup>
+// imports
 import { onMounted, computed } from 'vue'
 import { useJobStore } from '@/stores/jobStore.js'
 import { useCategoryStore } from '@/stores/categoryStore'
 import { useEmployerStore } from '@/stores/employerStore'
+import { useRoute } from 'vue-router'
 
+// variables
 const jobStore = useJobStore()
 const categoryStore = useCategoryStore()
 const employerStore = useEmployerStore()
 
-// Fetch everything on mount
+// fetch on mount
 onMounted(async () => {
   await Promise.all([
     jobStore.fetchJobs(),
@@ -88,6 +89,10 @@ onMounted(async () => {
   ])
 })
 
+//-BUTTON---------------
+// const goToJobDetails = () => useRoute().push('/candidate/')
+//----------------------
+
 // Helper to get logo from employer ID
 const getEmployerLogo = (employerId) => {
   const employer = employerStore.employers.find(e => e.id === employerId)
@@ -95,6 +100,8 @@ const getEmployerLogo = (employerId) => {
 }
 
 </script>
+
+
 
 <style scoped>
 .border-text-yellow {

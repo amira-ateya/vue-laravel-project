@@ -70,6 +70,10 @@ const routes = [
         component: CandidatePublicProfile,
         meta: { requiresAuth: true }
       },
+      // { 
+      //   path: 'jobDetails',
+      //   name: 'CandidatejobDetails',
+      //   component: CandidateJobDetails},
     ]
   },
 
