@@ -86,14 +86,26 @@
               <div class="row g-3 mt-2">
                 <div class="col-md-6">
                   <label class="form-label">Category*</label>
-                  <select class="form-select" v-model="job.category" @change="validateStep1">
-                    <option value="programming">Programming</option>
-                    <option value="design">Design</option>
-                    <option value="marketing">Marketing</option>
-                    <option value="sales">Sales</option>
-                    <option value="management">Management</option>
+
+                  <!-- [SENU]: MAKE THE CATEGORIES FETCHED FROM CATEGORY TABLE -->
+
+                  <select class="form-select" v-model="job.category" @change="validateStep1" :class="{ 'is-invalid': submitted && errors.category }">
+
+                    <option value="" disabled selected>Select...</option>
+                    <option 
+                      v-for="cat in catStore.categories" 
+                      :key="cat.id"  
+                      :value="cat.id"
+                    >
+                      {{ cat.category_name }}
+                    </option>
+                    
                   </select>
+                  <!--[SEMU] ERROR MESSAGE [IN CASE] -->
+                  <div v-if="submitted && errors.category" class="invalid-feedback">Please select a category</div>
                 </div>
+                <!-- [SENU] END OF MY ALTER -->
+
                 <div class="col-md-6">
                   <label class="form-label">Deadline*</label>
                   <input 
@@ -306,13 +318,18 @@
       </div>
     </div>
   </div>
+
+
 </template>
 
 <script setup>
+// imports
 import { ref, onMounted, computed } from 'vue'
 import { useJobStore } from '@/stores/jobStore'
 import { useRouter } from 'vue-router'
+import { useCategoryStore } from '@/stores/categoryStore'
 
+// properties to take
 const props = defineProps({
   jobData: {
     type: Object,
@@ -324,19 +341,21 @@ const props = defineProps({
   }
 })
 
+// VARS
 const jobStore = useJobStore()
+const catStore = useCategoryStore(); //[SENU] added
 const router = useRouter()
-
 const currentStep = ref(1)
 const isSubmitting = ref(false)
 const submitError = ref(null)
 const submitted = ref(false)
 
+// default values for jobs inputs
 const job = ref({
   title: '',
   work_type: 'remote',
   location: '',
-  category: 'programming',
+  category: '',
   salary_from: null,
   salary_to: null,
   deadline: '',
@@ -357,16 +376,21 @@ const errors = ref({
   deadline: false,
   salary_from: false,
   salary_to: false,
+  category: false, // [SENU] Added category error
   description: false,
   responsibilities: false,
   skills: false
 })
 
-// Initialize form
-onMounted(() => {
+// INITIALIZE FORM
+onMounted(async () => {
+  // Fetch categories
+  await catStore.fetchCategories();
+
   if (props.isEditing && props.jobData) {
     job.value = {
       ...props.jobData,
+      category: props.jobData.category || '', // [SENU]: if category is undefined
       responsibilities: props.jobData.responsibilities && props.jobData.responsibilities.length 
         ? [...props.jobData.responsibilities] 
         : [''],
@@ -380,16 +404,22 @@ onMounted(() => {
   }
 })
 
+
+//////////////VALIDATION//////////////////////////////////////////////
+// VALIDATION [1]
 const step1Valid = computed(() => {
   return (
     job.value.title.trim() &&
     job.value.location.trim() &&
     job.value.deadline &&
     job.value.salary_from !== null &&
-    job.value.salary_to !== null
+    job.value.salary_to !== null &&
+    job.value.category // [SENU] ensure category selection
   )
 })
 
+
+// VALIDATION [2]
 const step2Valid = computed(() => {
   const hasValidResponsibilities = job.value.responsibilities.some(r => r.trim())
   const hasValidSkills = job.value.skills.some(s => s.trim())
@@ -400,6 +430,7 @@ const step2Valid = computed(() => {
     hasValidSkills
   )
 })
+
 
 const setStep = (step) => {
   if (step === 2 && !step1Valid.value) {
@@ -425,7 +456,8 @@ const validateStep1 = () => {
     location: !job.value.location.trim(),
     deadline: !job.value.deadline,
     salary_from: job.value.salary_from === null,
-    salary_to: job.value.salary_to === null
+    salary_to: job.value.salary_to === null,
+    category: !job.value.category // [SENU] check empty category 
   }
 }
 
@@ -440,22 +472,27 @@ const validateStep2 = () => {
     skills: !hasValidSkills
   }
 }
+//////////////////////////////////////////////////////////////////////
 
 const nextStep = () => {
   submitted.value = true
   
   if (currentStep.value === 1) {
+
     validateStep1()
     if (!step1Valid.value) {
       submitError.value = 'Please complete all required fields in Job Information'
       return
     }
+
   } else if (currentStep.value === 2) {
+
     validateStep2()
     if (!step2Valid.value) {
       submitError.value = 'Please complete all required fields in Description'
       return
     }
+
   }
   
   currentStep.value++
@@ -531,6 +568,16 @@ const submitJob = async () => {
 }
 </script>
 
+
+
+
+
+
+
+
+
+
+<!--============================================================-->
 <style scoped>
 .nav-tabs {
   border-bottom: 2px solid #dee2e6;
