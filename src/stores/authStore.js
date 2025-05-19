@@ -1,60 +1,94 @@
-// stores/authStore.js
 import { defineStore } from 'pinia'
-import { SignJWT, jwtVerify } from 'jose'
-import { useUserStore } from '@/stores/userStore'
+import axios from 'axios'
 
-const secret = new TextEncoder().encode('senu')
+// make it default 
+axios.defaults.baseURL = 'http://localhost:8000/api'
 
+// store
 export const useAuthStore = defineStore('auth', {
+
+  // data
   state: () => ({
     user: null,
     token: localStorage.getItem('token') || null
   }),
 
+  // methods
   actions: {
 
-    async login(fullUserData) {
-      const payload = { id: fullUserData.id, role: fullUserData.role }
-
-      const token = await new SignJWT(payload)
-        .setProtectedHeader({ alg: 'HS256' })
-        .setIssuedAt()
-        .setExpirationTime('1h')
-        .sign(secret)
-
-      localStorage.setItem('token', token)
-      this.token = token
-      this.user = fullUserData
-      return { status: 200, data: fullUserData }
-    },
-
-    // CHECK AUTH — fixed
-    async checkAuth() {
-      const token = localStorage.getItem('token')
-      if (!token) return false
-
+    // login
+    async login(credentials) {
       try {
-        const { payload } = await jwtVerify(token, secret)
-        const userStore = useUserStore()
-        if (userStore.users.length === 0) {
-          await userStore.fetchUsers()
-        }
+        // post credentials
+        const response = await axios.post('/login', credentials)
+        const { user, token } = response.data
 
-        const fullUser = userStore.users.find(u => u.id === payload.id)
-        this.user  = fullUser || { id: payload.id, role: payload.role }
+        // store the token [local storage + header]
+        localStorage.setItem('token', token)
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+
+        this.user = user
         this.token = token
-        return true
+
+        return { status: 200, data: user }
+
       } catch (err) {
-        console.error('checkAuth failed:', err)
-        this.logout()
-        return false
+        console.error('Login failed:', err.response?.data?.message || err.message)
+
+        // optional cleanup if needed
+        localStorage.removeItem('token')
+        delete axios.defaults.headers.common['Authorization']
+        this.user = null
+        this.token = null
+
+        return {
+          status: err.response?.status || 401,
+          message: err.response?.data?.message || 'Login failed'
+        }
       }
     },
 
-    logout() {
-      this.user  = null
-      this.token = null
+    // logout function
+    async logout() {
+      try {
+        await axios.post('/logout') // ==> Laravel route must exist and be protected by auth:sanctum
+      } catch (e) {
+        console.warn('Logout request failed or token already invalid') 
+      }
+
+      // remove from local storage
       localStorage.removeItem('token')
+
+      // remove it from header
+      delete axios.defaults.headers.common['Authorization']
+
+      // reset state
+      this.user = null
+      this.token = null
+    },
+
+    // check authentication for protected pages
+    async checkAuth() {
+      const token = localStorage.getItem('token')
+
+      if (!token) return false
+
+      try {
+        // apply token
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+
+        // fetch user info
+        const res = await axios.get('/user')
+
+        this.user = res.data
+        this.token = token
+        return true
+
+      } catch (err) {
+        console.error('checkAuth error:', err.response?.data?.message || err.message)
+        this.logout() // clear state
+        return false
+      }
     }
   }
 })

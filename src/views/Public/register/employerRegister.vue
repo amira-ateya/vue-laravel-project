@@ -191,10 +191,12 @@ const handleEmployerSubmit = async () => {
   try {
     const step1Data = registerStore.step1Data
 
+    // user data
     const userPayload = {
       name: step1Data.fullName,
       email: step1Data.email,
       password: step1Data.password,
+      password_confirmation: step1Data.password,
       role: 'employer',
       profile_picture: profileImageUrl.value || defaultProfileImage,
       created_at: new Date().toISOString(),
@@ -203,13 +205,15 @@ const handleEmployerSubmit = async () => {
 
     const createdUser = await userStore.createUser(userPayload)
 
+    // employer data
     const employerPayload = {
-      user_id: createdUser.id,
+      user_id: createdUser.data.id,
       company_name: companyName.value,
       company_website: website.value,
       company_logo: companyLogoUrl.value || defaultCompanyLogo,
       bio: companyBio.value,
       phone: phone.value,
+      location: location.value,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     }

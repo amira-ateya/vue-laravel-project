@@ -93,31 +93,36 @@
 
 
         <!-- INPUT: PASSWORD -->
+<!-- INPUT: PASSWORD -->
         <div class="mb-3">
           <label class="form-label fw-bold fs-5 text-muted">Password</label>
           <input
             v-model="formData.password"
             type="password"
             class="form-control p-3 rounded-0"
-            :class="{ 'is-invalid': submitted && !formData.password }"
+            :class="{ 'is-invalid': submitted && (!formData.password || formData.password.length < 6) }"
             placeholder="Enter password"
           />
           <div v-if="submitted && !formData.password" class="invalid-feedback">
             Password is required.
           </div>
+          <div v-else-if="submitted && formData.password.length < 6" class="invalid-feedback">
+            Password must be at least 6 characters.
+          </div>
         </div>
+
 
         <!-- INPUT: CONFIRM PASSWORD -->
         <div class="mb-3">
           <label class="form-label fw-bold fs-5 text-muted">Confirm Password</label>
           <input
-            v-model="formData.confirmPassword"
+            v-model="formData.password_confirmation"
             type="password"
             class="form-control p-3 rounded-0"
-            :class="{ 'is-invalid': submitted && formData.confirmPassword !== formData.password }"
+            :class="{ 'is-invalid': submitted && formData.password_confirmation !== formData.password }"
             placeholder="Enter password again"
           />
-          <div v-if="submitted && formData.confirmPassword !== formData.password" class="invalid-feedback">
+          <div v-if="submitted && formData.password_confirmation !== formData.password" class="invalid-feedback">
             Passwords must match.
           </div>
         </div>
@@ -162,7 +167,7 @@ const formData = reactive({
   fullName: '',
   email: '',
   password: '',
-  confirmPassword: '',
+  password_confirmation: '',
 })
 
 // VALIDATOR
@@ -186,13 +191,15 @@ async function sendData() {
 
   // Basic validation
   if (
-    !formData.fullName ||
-    !isValidEmail(formData.email) ||
-    !formData.password ||
-    formData.password !== formData.confirmPassword
-  ) {
-    return
-  }
+  !formData.fullName ||
+  !isValidEmail(formData.email) ||
+  !formData.password ||
+  formData.password.length < 6 ||
+  formData.password.trim() !== formData.password_confirmation.trim()
+) {
+  return
+}
+
 
   // Check email uniqueness
   const isUnique = await checkEmailUnique(formData.email, userType)

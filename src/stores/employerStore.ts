@@ -7,8 +7,10 @@ export const useEmployerStore = defineStore('employer', () => {
   const loading = ref(false)
   const error = ref(null)
 
-  const apiUrl = 'http://localhost:3000/employers'
+  const apiUrl = 'http://localhost:8000/api/employers' //updated
 
+
+  // [GET ALL]
   const fetchEmployers = async () => {
     loading.value = true
     error.value = null
@@ -22,6 +24,7 @@ export const useEmployerStore = defineStore('employer', () => {
     }
   }
 
+  // [POST]
   const createEmployer = async (employerData: any) => {
     try {
       const res = await axios.post(apiUrl, employerData)

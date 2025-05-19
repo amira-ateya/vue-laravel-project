@@ -7,7 +7,8 @@ export const useCandidateStore = defineStore('candidate', () => {
   const loading = ref(false)
   const error = ref(null)
 
-  const apiUrl = 'http://localhost:3000/candidates'
+  //[UPDATED]
+  const apiUrl = 'http://localhost:8000/api/candidates'
 
   const fetchCandidates = async () => {
     loading.value = true
@@ -22,10 +23,20 @@ export const useCandidateStore = defineStore('candidate', () => {
     }
   }
 
+  /*
+  here we taking the candidate data as input
+  and make the method post to the url, we have
+  */
   const createCandidate = async (candidateData: any) => {
     try {
+      
+      // the most important code line-------------------
       const res = await axios.post(apiUrl, candidateData)
-      candidates.value.push(res.data)
+      //-------------------------------------------------
+
+      //[UPDATED]
+      candidates.value.push(res.data.candidate)
+
     } catch (err) {
         error.value = 'Failed to create candidate account'
     }
