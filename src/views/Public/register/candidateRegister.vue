@@ -113,7 +113,7 @@ const registerStore = useRegisterStore()
 const userStore = useUserStore()
 const candidateStore = useCandidateStore()
 
-// ✅ Redirect to /register if step1Data is not filled
+// redirect to /register if step1Data is not filled
 onMounted(() => {
   const { fullName, email, password } = registerStore.step1Data
   if (!fullName || !email || !password) {
@@ -158,19 +158,24 @@ async function handleSubmit() {
       const timestamp = new Date().toISOString()
 
       const userData = {
-        fullName: registerStore.step1Data.fullName,
-        email: registerStore.step1Data.email,
-        password: registerStore.step1Data.password,
-        profile_picture: imagePreview.value,
-        role: 'candidate',
-        created_at: timestamp,
-        updated_at: timestamp
-      }
+      name: registerStore.step1Data.fullName,
+      email: registerStore.step1Data.email,
+      password: registerStore.step1Data.password,
+      password_confirmation: registerStore.step1Data.password,
+      profile_picture: imagePreview.value,
+      role: 'candidate',
+      created_at: timestamp,
+      updated_at: timestamp
+    }
+
+    console.log("candidateRegister: handleSubmit: userData", userData); //debug
+
 
       const createdUser = await userStore.createUser(userData)
+      console.log("candidateRegister: handleSubmit: createdUser", createdUser); //debug
 
       const candidateData = {
-        user_id: createdUser.id,
+        user_id: createdUser.data.id,
         resume: pdfPreview.value,
         linkedin_profile: linkedin.value,
         phone_number: phone.value,
@@ -179,6 +184,8 @@ async function handleSubmit() {
         created_at: timestamp,
         updated_at: timestamp
       }
+
+      console.log('candidateRegister: handleSubmit: candidateData = ', candidateData); //debug
 
       await candidateStore.createCandidate(candidateData)
 

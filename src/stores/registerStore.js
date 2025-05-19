@@ -1,4 +1,4 @@
-// temporary store for registeration completion [SENU]
+// temporary store for registration completion [SENU]
 import { defineStore } from 'pinia'
 
 export const useRegisterStore = defineStore('register', {
@@ -6,7 +6,8 @@ export const useRegisterStore = defineStore('register', {
     step1Data: {
       fullName: '',
       email: '',
-      password: ''
+      password: '',
+      password_confirmation: ''
     },
   }),
 
@@ -19,7 +20,8 @@ export const useRegisterStore = defineStore('register', {
       this.step1Data = {
         fullName: '',
         email: '',
-        password: ''
+        password: '',
+        password_confirmation: '' 
       }
     }
   }

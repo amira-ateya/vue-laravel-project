@@ -151,7 +151,6 @@ const validateForm = () => {
 
 
 // functions
-
 const handleLogin = async () => {
 
   //  that mean it is touched
@@ -161,37 +160,44 @@ const handleLogin = async () => {
   // check + get 
   if (validateForm()) {
     if (userStore.users.length === 0) {
+      //-------------------------
       await userStore.fetchUsers();
+      //-------------------------
     }
 
-    // get the user using email and pass
-    const user = userStore.users.find(
-      (u) => u.email === email.value && u.password === password.value
-    );
+    // DEBUG: [see all users]
+    console.log('users:', userStore.users); // debug: wonderfu : get the array of users
+    console.log("the password we input it : password.value = ", password.value);
 
+    // send email, password to authStore
+    const credentials = { email: email.value,password: password.value};
 
-    if (user) {
+    //-------------------------------------------
+    const response = await authStore.login(credentials);
+    //-------------------------------------------
 
-      // generate token using the data ++ redirect 
-      const response = await authStore.login(user); 
+    console.log('login.vue : login : response  = ', response); // ❗ FIXED: was 'consoel.log'
 
-      if (response.status === 200) {
-        if (user.role === 'candidate') {
-          router.push('/candidate/');
-        } else if (user.role === 'employer') {
-          router.push('/employer/');
-        }
+    // if everything is fine ==> route
+    if (response.status === 200) {
+      const user = response.data; // ✅ CHANGED: get user from backend response
+
+      if (user.role === 'candidate') {
+        router.push('/candidate/');
+      } else if (user.role === 'employer') {
+        router.push('/employer/');
       }
-      // couddn't find it 
     } else {
+      // show error
       emailError.value = 'Invalid email or password.';
       passwordError.value = 'Invalid email or password.';
     }
   }
 };
 
+
 onMounted(() => {
-  // we can add something here like a preloading but later
+  // add something here like a preloading but later
 });
 </script>
 

@@ -38,8 +38,23 @@ export const useEmployerStore = defineStore('employer', () => {
     pendingApplications: 0
   })
 
-  const apiUrl = 'http://localhost:3000'
+  const apiUrl = 'http://localhost:8000/api'
 
+  // [GET ALL EMPLOYERS]
+  const fetchEmployers = async () => {
+    loading.value = true
+    error.value = null
+    try {
+      const res = await axios.get<Employer[]>(`${apiUrl}/employers`)
+      employers.value = res.data
+    } catch (err) {
+      error.value = 'Failed to load company data'
+    } finally {
+      loading.value = false
+    }
+  }
+
+  // [GET SINGLE EMPLOYER PROFILE]
   const fetchEmployerProfile = async (userId: number) => {
     loading.value = true
     error.value = null
@@ -59,19 +74,40 @@ export const useEmployerStore = defineStore('employer', () => {
     }
   }
 
-  const fetchEmployers = async () => {
+  // [POST CREATE EMPLOYER]
+  const createEmployer = async (
+    employerData: Omit<Employer, 'id' | 'created_at' | 'updated_at'>
+  ) => {
     loading.value = true
     error.value = null
     try {
-      const res = await axios.get<Employer[]>(`${apiUrl}/employers`)
-      employers.value = res.data
+      const res = await axios.post<Employer>(`${apiUrl}/employers`, employerData)
+      employers.value.push(res.data)
     } catch (err) {
-      error.value = 'Failed to load company data'
+      error.value = 'Create company account failed'
     } finally {
       loading.value = false
     }
   }
 
+  // [PATCH UPDATE EMPLOYER]
+  const updateEmployerProfile = async (id: number, profileData: Partial<Employer>) => {
+    loading.value = true
+    error.value = null
+    try {
+      const res = await axios.patch<Employer>(`${apiUrl}/employers/${id}`, profileData)
+      employer.value = {
+        ...(employer.value || {}),
+        ...res.data
+      }
+    } catch (err) {
+      error.value = 'Failed to update profile'
+    } finally {
+      loading.value = false
+    }
+  }
+
+  // [GET STATS]
   const fetchEmployerStats = async (employerId: number) => {
     error.value = null
     try {
@@ -95,35 +131,6 @@ export const useEmployerStore = defineStore('employer', () => {
       }
     } catch (err) {
       error.value = 'Failed to load stats'
-    }
-  }
-
-  const updateEmployerProfile = async (id: number, profileData: Partial<Employer>) => {
-    loading.value = true
-    error.value = null
-    try {
-      const res = await axios.patch<Employer>(`${apiUrl}/employers/${id}`, profileData)
-      employer.value = {
-        ...(employer.value || {}),
-        ...res.data
-      }
-    } catch (err) {
-      error.value = 'Failed to update profile'
-    } finally {
-      loading.value = false
-    }
-  }
-
-  const createEmployer = async (employerData: Omit<Employer, 'id' | 'created_at' | 'updated_at'>) => {
-    loading.value = true
-    error.value = null
-    try {
-      const res = await axios.post<Employer>(`${apiUrl}/employers`, employerData)
-      employers.value.push(res.data)
-    } catch (err) {
-      error.value = 'Create company account failed'
-    } finally {
-      loading.value = false
     }
   }
 
