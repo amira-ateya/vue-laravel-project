@@ -6,14 +6,12 @@
         <div class="d-flex justify-content-between align-items-start bg-light p-4 rounded">
           <div>
             <h2 class="fw-bold">{{ job.title }}</h2>
-            <!-- SENU ALTER -->
-             <span class="badge border border-primary text-primary rounded-pill px-3 py-2 fw-semibold fs-6 me-2">{{ job.location }}</span>
-             <span class="badge border border-danger text-danger rounded-pill px-3 py-2 fw-semibold fs-6">{{ job.work_type }}</span>
-
-            </div>
+            <span class="badge border border-primary text-primary rounded-pill px-3 py-2 fw-semibold fs-6 me-2">{{ job.location }}</span>
+            <span class="badge border border-danger text-danger rounded-pill px-3 py-2 fw-semibold fs-6">{{ job.work_type }}</span>
+          </div>
           <div class="d-flex align-items-center">
             <i class="bi bi-share subtle-bg me-3 fs-4"></i>
-            <router-link :to="{ name: 'applyModal', params: { jobId: job.id } }">
+            <router-link to="/candidate/apply/2">
               <button class="btn bg-purple text-light rounded-0 p-4 fw-bold fs">Apply</button>
             </router-link>
           </div>
@@ -33,59 +31,42 @@
         <div class="mb-4 p-4 bg-white rounded shadow-sm">
           <h4 class="fw-semibold">Responsibilities</h4>
           <ul class="list-unstyled mt-3">
-            <li v-for="(r, i) in job.responsibilities" :key="i" class="mb-2">
+            <li v-for="(r, i) in responsibilitiesList" :key="i" class="mb-2">
               <i class="bi bi-check-circle text-success me-2"></i> {{ r }}
             </li>
           </ul>
         </div>
 
-
         <div class="card border-0 shadow-sm">
           <div class="card-body">
             <h4 class="fw-semibold mb-3">Required Skills</h4>
             <div class="d-flex flex-wrap gap-2">
-              <span
-                v-for="(skill, i) in job.skills"
-                :key="i"
-                class="skill-tag"
-              >
-                {{ skill }}
-              </span>
-              <span
-                v-for="(tech, i) in job.technologies"
-                :key="`tech-${i}`"
-                class="skill-tag"
-              >
-                {{ tech }}
-              </span>
+              <span v-for="(skill, i) in job.skills" :key="i" class="skill-tag">{{ skill }}</span>
+              <span v-for="(tech, i) in job.technologies" :key="`tech-${i}`" class="skill-tag">{{ tech }}</span>
             </div>
           </div>
         </div>
-
       </section>
 
       <!-- RIGHT COLUMN -->
       <section class="col-lg-4 mt-3">
-
-
         <div class="card border-0 shadow-sm mb-4">
           <div class="card-body">
             <span class="fw-semibold mb-3 me-3 fs-5">Category: </span>
-            <span class="badge bg-primary-subtle text-primary p-3 fs-6"> {{ catName }} </span>
+            <span class="badge bg-primary-subtle text-primary p-3 fs-6">
+              {{ job.category?.category_name || 'Unknown' }}
+            </span>
           </div>
         </div>
 
         <div class="card border-0 shadow-sm mb-4">
           <div class="card-body">
-            <!-- <h6 class="fw-bold mb-3">About this role</h6> -->
-            <!-- <p><i class="bi bi-people me-2"></i>{{ job.candidates_id.length }} applied of 10 capacity</p> -->
             <p><strong>Apply Before:</strong> {{ formatDate(job.deadline) }}</p>
             <p><strong>Posted On:</strong> {{ formatDate(job.created_at) }}</p>
             <p><strong>Job Type:</strong> {{ job.work_type }}</p>
             <p><strong>Salary:</strong> {{ job.salary_from }} - {{ job.salary_to }} USD</p>
           </div>
         </div>
-        
       </section>
     </div>
 
@@ -112,30 +93,38 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+// imports
+import { ref, computed, onMounted } from 'vue';
 import { useJobStore } from '@/stores/jobStore';
-import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';
-import { useCategoryStore } from '@/stores/categoryStore';
 
+// variables
 const jobStore = useJobStore();
-const catStore = useCategoryStore();
-const { jobs } = storeToRefs(jobStore);
 const route = useRoute();
 const jobId = ref(route.params.id);
-const catName = ref('');  // <-- Make reactive
 
-const job = computed(() => {
-  return jobs.value.find(j => j.id == jobId.value) || {};
-});
-
+// fetching the data
 onMounted(async () => {
   await jobStore.fetchJobs();
-  await catStore.fetchCategories(); 
-  catName.value = catStore.getCategoryNameById(job.value.category);  // <-- Update reactive ref
 });
 
+// get the job data
+const job = computed(() => {
+  return jobStore.jobs.find(j => j.id == jobId.value) || {};
+});
+
+// handle responsibilities
+const responsibilitiesList = computed(() => {
+  if (!job.value.responsibilities) return [];
+  return job.value.responsibilities
+    .split('.')
+    .map(r => r.trim())
+    .filter(r => r.length > 0);
+});
+
+// format date
 const formatDate = (dateString) => {
+  if (!dateString) return '';
   const date = new Date(dateString);
   return date.toLocaleDateString(undefined, {
     year: 'numeric',
@@ -144,6 +133,7 @@ const formatDate = (dateString) => {
   });
 };
 
+// perks data
 const perks = [
   {
     icon: 'bi bi-heart-pulse',
@@ -184,7 +174,6 @@ const perks = [
 </script>
 
 <style scoped>
-
 .bg-purple {
   background-color: #4444dc !important;
 }

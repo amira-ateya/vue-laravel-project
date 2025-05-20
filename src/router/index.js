@@ -76,9 +76,10 @@ const routes = [
       },
       // adding the apply modal for the job;
       {
-        path: 'apply',
+        path: 'apply/:job_id',
         name: 'applyModal',
-        component: candidateApplyModel
+        component: candidateApplyModel,
+        props: true
       },
 
 

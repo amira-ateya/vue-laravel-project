@@ -6,99 +6,131 @@
     <div class="p-3 d-flex justify-content-between align-items-center">
       <div>
         <h2 class="fw-bold">All Jobs</h2>
-        <h5>Showing {{ jobStore.jobs.length }} results</h5>
+        <h5>Showing {{ filteredJobs.length }} results</h5>
       </div>
     </div>
 
     <!-- Looping through jobs -->
-    <div v-for="job in jobStore.jobs" :key="job.id">
+    <div v-if="filteredJobs.length > 0">
+      <div v-for="(job, index) in filteredJobs" :key="job.id">
 
-      <!-- JOB CARD -->
-      <div class="border p-4 d-flex justify-content-between align-items-center my-3">
+        <!-- JOB CARD -->
+        <div class="border p-4 d-flex justify-content-between align-items-center my-3">
 
-        <!-- Left side: company image + title + location + categories -->
-        <div class="d-flex">
-          <!-- company logo -->
-          <div class="me-4">
-            <img
-              :src="getEmployerLogo(job.employer_id)"
-              alt="company logo"
-              style="width: 60px; height: 60px; object-fit: cover;"
-            >
-          </div>
+          <!-- Left side: company image + title + location + categories -->
+          <div class="d-flex">
+            <!-- company logo -->
+            <div class="me-4">
+              <img
+                :src="job.employer?.company_logo"
+                alt="company logo"
+                style="width: 60px; height: 60px; object-fit: cover;"
+                @error="onImageError($event, index)"
+              />
+            </div>
 
-          <!-- text info -->
-          <div class="d-flex flex-column gap-1">
-            <h3 class="">{{ job.title }}</h3>
-            <h5 class="text-secondary mb-3">{{ job.location }}</h5>
-            <span>
-              <span class="badge rounded-pill cstm-bg-text-green" style="font-size: 1.1rem; padding: 0.5em 0.9em;">
-                {{ job.work_type }}
-              </span>
-
-              <!-- Categories -->
-                <span class="badge border rounded-pill me-2 border-text-purple" style="font-size: 1.1rem; padding: 0.5em 0.9em;">
-                  {{ categoryStore.getCategoryNameById(job.category) }}
+            <!-- text info -->
+            <div class="d-flex flex-column gap-1">
+              <h3>{{ job.title }}</h3>
+              <h5 class="text-secondary mb-3">{{ job.location }}</h5>
+              <span>
+                <!-- Work Type Badge -->
+                <span class="badge rounded-pill cstm-bg-text-green" style="font-size: 1.1rem; padding: 0.5em 0.9em;">
+                  {{ job.work_type }}
                 </span>
-            </span>
+
+                <!-- Category Badge -->
+                <span class="badge border rounded-pill me-2 border-text-purple" style="font-size: 1.1rem; padding: 0.5em 0.9em;">
+                  {{ job.category?.category_name || 'Unknown Category' }}
+                </span>
+              </span>
+            </div>
+          </div>
+
+          <!-- Right side: apply button + progress + applicants -->
+          <div style="width: 200px;" class="d-flex flex-column justify-content-between gap-3">
+
+            <!-- Apply Button -->
+            <button class="btn w-100 rounded-0 px-5 py-3 fw-bold fs-5 bg-purple text-white" @click="goToJobDetails(job.id)">
+              Apply
+            </button>
+
+            <!-- Progress Bar -->
+            <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+              :aria-valuenow="applicantsPercent(job)">
+              <div
+                class="progress-bar"
+                :style="{ width: applicantsPercent(job) + '%' }"
+              ></div>
+            </div>
+
+            <!-- Applicants Count -->
+            <div style="font-size: 1.15rem;">
+              <span class="fw-bold">{{ job.candidates_id?.length || 0 }} applied</span> 
+              <span class="text-secondary"> of 10 capacity</span>
+            </div>
+
           </div>
         </div>
-
-        <!-- Right side: apply button + progress + applicants -->
-        <div style="width: 200px;" class="d-flex flex-column justify-content-between gap-3">
-
-          <!-- BUTTON--------------------------------------------------------------------------------- -->
-          <button class="btn w-100 rounded-0 px-5 py-3 fw-bold fs-5 bg-purple text-white" @click="goToJobDetails(job.id)">Apply</button>
-          <!------------------------------------------------------------------------------------------ -->
-
-          <div class="progress">
-            <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-
-          <div style="font-size: 1.15rem;">
-            <span class="fw-bold">{{ job.candidates_id?.length || 0 }} applied</span> 
-            <span class="text-secondary"> of 10 capacity</span>
-          </div>
-
-        </div>
-
       </div>
     </div>
+
+    <!-- No jobs message -->
+    <div v-else class="text-center mt-5 text-secondary fs-4">
+      No jobs found based on your search or filters.
+    </div>
+
   </div>
 </template>
 
+
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, computed } from 'vue'
 import { useJobStore } from '@/stores/jobStore.js'
 import { useCategoryStore } from '@/stores/categoryStore'
 import { useEmployerStore } from '@/stores/employerStore'
-import { useRouter } from 'vue-router' 
+import { useRouter } from 'vue-router'
+import { toRefs } from 'vue'
+
+const props = defineProps({
+  search: {
+    type: Object,
+    default: () => ({ searchTerm: '', location: '' })
+  }
+})
+
+const { search } = toRefs(props)
 
 const jobStore = useJobStore()
 const categoryStore = useCategoryStore()
 const employerStore = useEmployerStore()
-const router = useRouter() 
+const router = useRouter()
 
 onMounted(async () => {
-  await Promise.all([
-    jobStore.fetchJobs(),
-    categoryStore.fetchCategories(),
-    employerStore.fetchEmployers()
-  ])
+  await jobStore.fetchJobs()
 })
 
-// for navigation
+const filteredJobs = computed(() => {
+  return jobStore.jobs.filter(job => {
+    const titleMatch = job.title.toLowerCase().includes(search.value.searchTerm.toLowerCase())
+    const locationMatch = job.location.toLowerCase().includes(search.value.location.toLowerCase())
+    return titleMatch && locationMatch
+  })
+})
+
 const goToJobDetails = (id) => router.push(`/candidate/jobs/${id}`)
 
-// Get employer logo
-const getEmployerLogo = (employerId) => {
-  const employer = employerStore.employers.find(e => e.id === employerId)
-  return employer?.company_logo || 'https://cdn-icons-png.flaticon.com/128/300/300221.png'
+const onImageError = (event, index) => {
+  event.target.src = `https://cdn-icons-png.flaticon.com/512/300/30022${(index + 1) % 10}.png`
+}
+
+const applicantsPercent = (job) => {
+  const applied = job.candidates_id?.length || 0
+  const capacity = 10
+  const percent = (applied / capacity) * 100
+  return percent > 100 ? 100 : percent
 }
 </script>
-
-
-
 
 <style scoped>
 .border-text-yellow {

@@ -26,7 +26,7 @@ export const useJobStore = defineStore('job', () => {
         loading.value = true
         clearError()
         try {
-            const response = await axios.get('http://localhost:3000/jobs')
+            const response = await axios.get('http://localhost:8000/api/jobs') //updated
             jobs.value = response.data
             return response.data
         } catch (err) {

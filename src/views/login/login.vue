@@ -170,7 +170,7 @@ const handleLogin = async () => {
     console.log("the password we input it : password.value = ", password.value);
 
     // send email, password to authStore
-    const credentials = { email: email.value,password: password.value};
+    const credentials = { email: email.value,password: password.value}; //CHANGE HERE
 
     //-------------------------------------------
     const response = await authStore.login(credentials);
