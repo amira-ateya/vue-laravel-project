@@ -57,7 +57,7 @@
         </template>
       </nav>
 
-      <hr><!-- LINE ----------------------------------------------------------------------------->
+      </hr><!-- LINE ----------------------------------------------------------------------------->
 
       <!-- TITLE SECTION -->
       <small class="text-uppercase text-muted px-2">Settings</small>
@@ -85,25 +85,47 @@
     </div>
 <!-- USER INFO -->
     <div class="d-flex align-items-center p-2 mt-4">
-      <img src="https://i.pravatar.cc/40" class="rounded-circle me-2" alt="Avatar" width="40" height="40"> <!-- userimage -->
+      <img :src="userImage" class="rounded-circle me-2" alt="Avatar" width="60" height="60">
       <div>
-        <div class="fw-bold">Jake Gyll</div> <!-- username -->
-        <div class="text-muted" style="font-size: 0.875rem;">jakegyll@email.com</div> <!-- email -->
+        <div class="fw-bold">{{ user.name  }}</div> <!-- username -->
+        <div class="text-muted" style="font-size: 0.875rem;">{{ user.email }}</div> <!-- email -->
       </div>
     </div>
   </aside>
 </template>
 
 <script setup>
+// imports
 import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore' // <-- make sure the path is correct
+import axios from 'axios'
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
-
 const userRole = ref('candidate')
+
+
+//=========GET USER IMAGE + EMAIL============
+
+const user = ref({});
+const base = 'http://localhost:8000/storage/';
+const userImage = ref('');
+
+// first add the token in the header
+const token = localStorage.getItem('token');
+axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+
+onMounted(async() =>{
+  const res = await axios.get('http://localhost:8000/api/user');
+  user.value = res.data;
+  userImage.value = base + res.data.profile_picture;
+  console.log("user image = ", userImage.value);
+  console.log("[Dashboard] user.value = ",user.value); //debug
+})
+
+//===========================================
 
 // Update role based on current path
 const updateUserRole = () => {
@@ -133,3 +155,6 @@ const logout = () => {
   border-radius: 8px;
 }
 </style>
+
+
+<!-- https://i.pravatar.cc/40 -->
