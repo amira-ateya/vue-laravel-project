@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Welcome from '@/components/welcome.vue'
+import Welcome from '@/welcome.vue'
 
 // [MOVED] import CandidatePublicProfile from '@/components/candidate/candidatePublicProfile.vue'
 
 // [REPEATED: removed]
-
+//Admin
+import  adminDashBoard from '@/views/Admin/adminDashBoard.vue'
 // [NEW]: 
 // employer
   import ApplicationDetails from '@/views/Employer/ApplicationDetails.vue'
@@ -40,7 +41,8 @@ import Welcome from '@/components/welcome.vue'
 
 
 const routes = [
-
+//Admin
+{path:'/admin',name: 'Admin' , component : adminDashBoard},
   // AUTH
   { path: '/', name: 'welcome', component: Welcome },
   { path: '/login', name: 'Login', component: Login },

@@ -181,12 +181,16 @@ const handleLogin = async () => {
     // if everything is fine ==> route
     if (response.status === 200) {
       const user = response.data; // ✅ CHANGED: get user from backend response
+      console.log(user)
 
       if (user.role === 'candidate') {
         router.push('/candidate/');
       } else if (user.role === 'employer') {
         router.push('/employer/');
+      }else if (user.role === 'admin') {
+        router.push('/admin');
       }
+      
     } else {
       // show error
       emailError.value = 'Invalid email or password.';
