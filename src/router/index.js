@@ -163,7 +163,13 @@ const routes = [
         name: 'EmployerJobListing',
         component: JobListingPage,
         meta: { requiresAuth: true }
-      }
+      },
+      {
+  path: '/employer/profile',
+  name: 'EmployerProfile',
+  component: () => import('@/views/Employer/EmployerProfile.vue')
+}
+
     ]
   }
 ]
