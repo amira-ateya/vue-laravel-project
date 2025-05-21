@@ -37,7 +37,7 @@
 
 <script setup>
 import { onMounted, reactive, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 
 const form = reactive({
@@ -49,10 +49,11 @@ const submitted = ref(false)
 const showSuccess = ref(false)
 
 const route = useRoute()
+const router = useRouter()
 const job_id = ref(route.params.job_id)
 const candidate_id = ref(null)
 
-// Fetch logged-in user info (must be authenticated with Sanctum)
+// Fetch logged-in user info
 onMounted(async () => {
   try {
     const res = await axios.get('http://localhost:8000/api/user')
@@ -84,8 +85,13 @@ const submitForm = async () => {
         }
       })
 
+      // Optional: Show success message for 1.5 seconds, then redirect
       showSuccess.value = true
       submitted.value = false
+
+      setTimeout(() => {
+        router.push('/candidate/applications') // ✅ Redirect after success
+      }, 1500)
     } catch (error) {
       console.error('Application submission failed:', error)
     }

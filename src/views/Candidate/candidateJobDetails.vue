@@ -11,9 +11,10 @@
           </div>
           <div class="d-flex align-items-center">
             <i class="bi bi-share subtle-bg me-3 fs-4"></i>
-            <router-link to="/candidate/apply/2">
+            <router-link :to="`/candidate/apply/${job.id}`">
               <button class="btn bg-purple text-light rounded-0 p-4 fw-bold fs">Apply</button>
             </router-link>
+
           </div>
         </div>
       </div>
