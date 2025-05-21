@@ -54,13 +54,12 @@
             <p><strong>Salary:</strong> {{ app.job.salary_from }} - {{ app.job.salary_to }}</p>
             <p><strong>Deadline:</strong> {{ app.job.deadline }}</p>
             <p><strong>Description:</strong> {{ app.job.description }}</p>
-            <p><strong>Responsibilities:</strong>
-              <ul>
-                <li v-for="(item, idx) in splitResponsibilities(app.job.responsibilities)" :key="idx">
-                  {{ item }}
-                </li>
-              </ul>
-            </p>
+            <p><strong>Responsibilities:</strong></p>
+            <ul>
+              <li v-for="(item, idx) in splitResponsibilities(app.job.responsibilities)" :key="idx">
+                {{ item }}
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -93,6 +92,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, onMounted } from 'vue'
