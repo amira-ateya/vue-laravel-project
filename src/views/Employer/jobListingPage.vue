@@ -5,27 +5,27 @@
         <h2 class="mb-0">Job Listings</h2>
         <p class="text-muted mb-0">Manage your posted jobs</p>
       </div>
-      <div class="col-md-6 text-end">
+      <!-- <div class="col-md-6 text-end">
         <router-link to="/employer/post-job" class="btn btn-primary">
           <i class="fas fa-plus me-2"></i> Post New Job
         </router-link>
-      </div>
+      </div> -->
     </div>
 
-    <div v-if="jobStore.error" class="alert alert-danger alert-dismissible fade show mb-4">
-      {{ jobStore.error.message }}
-      <button type="button" class="btn-close" @click="jobStore.clearError()"></button>
+    <div v-if="error" class="alert alert-danger alert-dismissible fade show mb-4">
+      {{ error }}
+      <button type="button" class="btn-close" @click="error = null"></button>
     </div>
 
     <div class="card shadow-sm">
       <div class="card-body p-0">
-        <div v-if="jobStore.loading" class="text-center py-5">
+        <div v-if="loading" class="text-center py-5">
           <div class="spinner-border text-primary" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>
         </div>
 
-        <div v-else-if="jobStore.jobs.length === 0" class="text-center py-5">
+        <div v-else-if="jobs.length === 0" class="text-center py-5">
           <i class="fas fa-briefcase fa-4x text-muted mb-3"></i>
           <h5>No Jobs Posted Yet</h5>
           <p class="text-muted">Get started by posting your first job</p>
@@ -43,14 +43,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="job in jobStore.jobs" :key="job.id">
+              <tr v-for="job in jobs" :key="job.id">
                 <td>{{ job.title }}</td>
                 <td>{{ job.location }}</td>
                 <td>
                   <span class="badge bg-info text-capitalize">{{ job.work_type }}</span>
                 </td>
                 <td>
-                  <span class="badge bg-success">{{ job.status }}</span>
+                  <span class="badge bg-success text-capitalize">{{ job.status }}</span>
                 </td>
                 <td class="text-end">
                   <div class="d-flex justify-content-end gap-2">
@@ -80,24 +80,41 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
-import { useJobStore } from '@/stores/jobStore'
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
 
-const jobStore = useJobStore()
+const jobs = ref([])
+const loading = ref(false)
+const error = ref(null)
 
+// Load jobs from backend
+const fetchJobs = async () => {
+  loading.value = true
+  error.value = null
+  try {
+    const response = await axios.get('/employer/jobs')
+    jobs.value = response.data
+  } catch (err) {
+    error.value = err.response?.data?.message || 'Failed to fetch jobs.'
+  } finally {
+    loading.value = false
+  }
+}
+
+// Delete job
 const confirmDelete = async (id) => {
   if (confirm('Are you sure you want to delete this job?')) {
     try {
-      await jobStore.deleteJob(id)
-      await jobStore.fetchJobs()
-    } catch (error) {
-      console.error('Delete error:', error)
+      await axios.delete(`/employer/jobs/${id}`)
+      await fetchJobs() // Reload after delete
+    } catch (err) {
+      error.value = err.response?.data?.message || 'Failed to delete job.'
     }
   }
 }
 
 onMounted(() => {
-  jobStore.fetchJobs()
+  fetchJobs()
 })
 </script>
 

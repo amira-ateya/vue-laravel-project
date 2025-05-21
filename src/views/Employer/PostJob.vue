@@ -3,7 +3,7 @@
     <h2 class="form-title">Post a New Job</h2>
     <form @submit.prevent="postJob" class="form">
       <input v-model="form.title" type="text" placeholder="Job Title" class="input" required />
-      
+
       <select v-model="form.work_type" class="input" required>
         <option disabled value="">Select Work Type</option>
         <option v-for="type in workTypes" :key="type" :value="type">
@@ -12,7 +12,7 @@
       </select>
 
       <input v-model="form.location" type="text" placeholder="Location" class="input" />
-      
+
       <select v-model="form.category_id" class="input" required>
         <option disabled value="">Select Category</option>
         <option v-for="category in categories" :key="category.id" :value="category.id">
@@ -23,7 +23,7 @@
       <input v-model.number="form.salary_from" type="number" placeholder="Salary From" class="input" />
       <input v-model.number="form.salary_to" type="number" placeholder="Salary To" class="input" />
       <input v-model="form.deadline" type="date" class="input" required />
-      
+
       <textarea v-model="form.description" placeholder="Description" class="input" required></textarea>
       <textarea v-model="form.responsibilities" placeholder="Responsibilities" class="input"></textarea>
       <textarea v-model="form.benefits" placeholder="Benefits" class="input"></textarea>
@@ -35,7 +35,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import axios from 'axios'
+
+const router = useRouter()
 
 const form = ref({
   title: '',
@@ -85,6 +88,8 @@ const postJob = async () => {
     })
     alert('Job posted successfully!')
     console.log(res.data)
+    // Navigate after success
+    window.location.href = 'http://localhost:5173/employer/job-listing'
   } catch (error) {
     console.error('Error posting job', error.response?.data || error.message)
     alert('Failed to post job')
