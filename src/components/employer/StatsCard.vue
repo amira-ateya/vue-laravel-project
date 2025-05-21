@@ -1,56 +1,59 @@
 <template>
-    <div class="stats-card" :style="{ borderLeft: `4px solid ${color}` }">
-      <div class="stats-icon" :style="{ backgroundColor: color + '20' }">
-        <i :class="`fas fa-${icon}`" :style="{ color }"></i>
-      </div>
-      <div class="stats-content">
-        <h3>{{ title }}</h3>
-        <p>{{ value }}</p>
-      </div>
+  <div class="stats-card" :style="{ borderLeft: `4px solid ${color}` }">
+    <div class="stats-icon">
+      <i :class="icon" :style="{ color }"></i>
     </div>
-  </template>
-  
-  <script setup lang="ts">
-  defineProps({
+    <div class="stats-content">
+      <h3>{{ title }}</h3>
+      <p class="stats-value">{{ value }}</p>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
     title: String,
-    value: [String, Number],
+    value: [Number, String],
     icon: String,
     color: String
-  })
-  </script>
-  
-  <style scoped>
-  .stats-card {
-    background: white;
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-    display: flex;
-    align-items: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   }
-  
-  .stats-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 1rem;
-    font-size: 1.25rem;
-  }
-  
-  .stats-content h3 {
-    color: #6c757d;
-    font-size: 0.875rem;
-    margin-bottom: 0.25rem;
-    font-weight: 500;
-  }
-  
-  .stats-content p {
-    color: #202430;
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin: 0;
-  }
-  </style>
+}
+</script>
+
+<style scoped>
+.stats-card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.stats-icon {
+  font-size: 24px;
+  margin-right: 15px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: rgba(67, 97, 238, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stats-content h3 {
+  font-size: 14px;
+  color: #6c757d;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.stats-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2b2d42;
+  margin: 0;
+}
+</style>

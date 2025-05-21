@@ -1,48 +1,27 @@
+<!-- components/employer/LatestApplications.vue -->
 <template>
-    <div class="recent-applications">
-      <h2>Recent Applications</h2>
-      <div v-if="loading">Loading...</div>
-      <div v-else>
-        <table class="applications-table">
-          <thead>
-            <tr>
-              <th>Candidate</th>
-              <th>Job</th>
-              <th>Status</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="app in applications" :key="app.id">
-              <td>{{ app.candidate?.user?.name }}</td>
-              <td>{{ app.job?.title }}</td>
+  <div class="bg-white rounded-2xl p-6 shadow">
+    <h3 class="text-xl font-bold text-[#4640DE] mb-4">آخر الطلبات</h3>
+    <ul>
+      <li
+        v-for="app in applications"
+        :key="app.id"
+        class="flex justify-between items-center py-2 border-b"
+      >
+        <div>
+          <p class="font-semibold">{{ app.candidate_name }}</p>
+          <p class="text-sm text-gray-500">{{ app.job_title }}</p>
+        </div>
+        <span class="text-sm text-gray-400">{{ new Date(app.created_at).toLocaleDateString() }}</span>
+      </li>
+    </ul>
+  </div>
+</template>
 
-              <td>
-                <span class="status-badge" :class="app.status">{{ app.status }}</span>
-              </td>
-              <td>{{ formatDate(app.created_at) }}</td>
-            </tr>
-          </tbody>
-        </table>
-        <router-link to="/employer/applications" class="view-all">
-          View All Applications <i class="fas fa-arrow-right"></i>
-        </router-link>
-      </div>
-    </div>
-  </template>
-  
-  <script setup lang="ts">
-  import { format } from 'date-fns'
-  
-  defineProps({
-    applications: Array,
-    loading: Boolean
-  })
-  
-  const formatDate = (dateString: string) => {
-    return format(new Date(dateString), 'MMM dd, yyyy')
-  }
-  </script>
+<script setup>
+defineProps(['applications'])
+</script>
+
   
   <style scoped>
   .applications-table {

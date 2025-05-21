@@ -1,48 +1,23 @@
 <template>
-    <div class="recent-jobs">
-      <h2>Recent Job Postings</h2>
-      <div v-if="loading">Loading...</div>
-      <div v-else>
-        <table class="jobs-table">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Applications</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="job in jobs" :key="job.id">
-              <td>{{ job.title }}</td>
-              <td>{{ job.applications_count || 0 }}</td>
-              <td>
-                <span class="status-badge" :class="job.status">{{ job.status }}</span>
-              </td>
-              <td>
-                <button class="action-btn view">
-                  <i class="fas fa-eye"></i>
-                </button>
-                <button class="action-btn edit">
-                  <i class="fas fa-edit"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <router-link to="/employer/jobs" class="view-all">
-          View All Jobs <i class="fas fa-arrow-right"></i>
-        </router-link>
-      </div>
-    </div>
-  </template>
-  
-  <script setup lang="ts">
-  defineProps({
-    jobs: Array,
-    loading: Boolean
-  })
-  </script>
+  <div class="bg-white rounded-2xl p-6 shadow">
+    <h3 class="text-xl font-bold text-[#4640DE] mb-4">آخر الوظائف</h3>
+    <ul>
+      <li
+        v-for="job in jobs"
+        :key="job.id"
+        class="flex justify-between items-center py-2 border-b"
+      >
+        <span>{{ job.title }}</span>
+        <span class="text-sm text-gray-500">{{ new Date(job.created_at).toLocaleDateString() }}</span>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script setup>
+defineProps(['jobs'])
+</script>
+
   
   <style scoped>
   .jobs-table {
