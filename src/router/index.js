@@ -122,12 +122,13 @@ const routes = [
         meta: { requiresAuth: true, role: 'employer' }
       },
       // application details added
-      {
-        path: 'applications/:id',
-        name: 'ApplicationDetails',
-        component: ApplicationDetails,
-        meta: { requiresAuth: true, role: 'employer' }
-      },
+     {
+  path: '/applications/:id',
+  name: 'ApplicationDetails',
+  component: () => import('@/views/Employer/ApplicationDetails.vue'),
+  meta: { requiresAuth: true }
+}
+,
       // employers applications added
       {
         path: 'applications',
@@ -168,7 +169,7 @@ const routes = [
   path: '/employer/profile',
   name: 'EmployerProfile',
   component: () => import('@/views/Employer/EmployerProfile.vue')
-}
+},
 
     ]
   }
