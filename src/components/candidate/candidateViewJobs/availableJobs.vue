@@ -22,7 +22,7 @@
             <!-- company logo -->
             <div class="me-4">
               <img
-                :src="job.employer?.company_logo"
+                :src="getLogoUrl(job, index)"
                 alt="company logo"
                 style="width: 60px; height: 60px; object-fit: cover;"
                 @error="onImageError($event, index)"
@@ -83,7 +83,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { onMounted, computed } from 'vue'
 import { useJobStore } from '@/stores/jobStore.js'
@@ -110,6 +109,7 @@ onMounted(async () => {
   await jobStore.fetchJobs()
 })
 
+// Filtering jobs by search
 const filteredJobs = computed(() => {
   return jobStore.jobs.filter(job => {
     const titleMatch = job.title.toLowerCase().includes(search.value.searchTerm.toLowerCase())
@@ -118,12 +118,23 @@ const filteredJobs = computed(() => {
   })
 })
 
+// Navigate to job detail page
 const goToJobDetails = (id) => router.push(`/candidate/jobs/${id}`)
 
+// Get image URL from local server, fallback if null or invalid
+const getLogoUrl = (job, index) => {
+  if (job?.employer?.company_logo) {
+    return `http://localhost:8000/storage/${job.employer.company_logo}`
+  }
+  return `https://cdn-icons-png.flaticon.com/512/300/30022${(index + 1) % 10}.png`
+}
+
+// Handle image loading error
 const onImageError = (event, index) => {
   event.target.src = `https://cdn-icons-png.flaticon.com/512/300/30022${(index + 1) % 10}.png`
 }
 
+// Get applicants progress %
 const applicantsPercent = (job) => {
   const applied = job.candidates_id?.length || 0
   const capacity = 10

@@ -176,16 +176,16 @@ const handleLogin = async () => {
     const response = await authStore.login(credentials);
     //-------------------------------------------
 
-    console.log('login.vue : login : response  = ', response); // ❗ FIXED: was 'consoel.log'
+    console.log('login.vue : login : response  = ', response);
 
     // if everything is fine ==> route
     if (response.status === 200) {
-      const user = response.data; // ✅ CHANGED: get user from backend response
+      const user = response.data; 
 
       if (user.role === 'candidate') {
         router.push('/candidate/');
       } else if (user.role === 'employer') {
-        router.push('/employer/');
+        router.push('/employer/dashboard');
       }
     } else {
       // show error
