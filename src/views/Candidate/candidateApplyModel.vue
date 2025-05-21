@@ -5,29 +5,36 @@
       The following is required and will only be shared with Nomad
     </p>
 
+    <!-- alert appear after the submission success -->
     <div v-if="showSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
       Your application has been submitted successfully!
       <button type="button" class="btn-close" @click="showSuccess = false" aria-label="Close"></button>
     </div>
 
+    <!-- FORMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM -->
     <form @submit.prevent="submitForm" novalidate :class="{ 'was-validated': submitted }">
+
+      <!-- PHONE: form.contact_phone -->
       <div class="mb-3">
         <label class="form-label">Phone number</label>
         <input v-model="form.contact_phone" type="tel" class="form-control" placeholder="Enter your phone number" required />
         <div class="invalid-feedback">Phone number is required.</div>
       </div>
 
+      <!-- RESUME: ?(sending) -->
       <div class="mb-3">
         <label class="form-label">Attach your resume</label>
         <input type="file" class="form-control" @change="handleFileUpload" required />
         <div class="invalid-feedback">Resume upload is required.</div>
       </div>
 
+      <!-- SUBMIT BUTTON -->
       <button type="submit" class="btn bg-indigo-600 w-100 text-light">
         Submit Application
       </button>
     </form>
 
+    <!-- decore -->
     <p class="text-muted mt-3 small">
       By sending the request you confirm that you accept our
       <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
@@ -36,14 +43,21 @@
 </template>
 
 <script setup>
+// imports
 import { onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 
+
+// VARIABLE:
+//=============
+
+// form container
 const form = reactive({
   contact_phone: '',
   resume_snapshot: null
 })
+
 
 const submitted = ref(false)
 const showSuccess = ref(false)
@@ -53,24 +67,31 @@ const router = useRouter()
 const job_id = ref(route.params.job_id)
 const candidate_id = ref(null)
 
-// Fetch logged-in user info
+// ONCE PAGE LOAD:
 onMounted(async () => {
   try {
-    const res = await axios.get('http://localhost:8000/api/user')
+
+    // GET THE CURRENT USER
+    const res = await axios.get('http://localhost:8000/api/user');
+    console.log('debug:::::: res.data  = ', res.data.id) // DEBUG
+
+    // GET CANDIDATE INFO
     candidate_id.value = res.data.id
-  } catch (error) {
-    console.error('Authentication error:', error)
-  }
+
+  } catch (error) {console.error('Authentication error:', error)}
 })
 
+// UPLOAD PDF
 const handleFileUpload = (event) => {
   form.resume_snapshot = event.target.files[0]
 }
 
+// SUBMISSION
 const submitForm = async () => {
   submitted.value = true
   const formElement = document.querySelector('form')
 
+  // FRONT VALIDATION + ADD DATA IN CONTAINER
   if (formElement.checkValidity()) {
     const formData = new FormData()
     formData.append('contact_phone', form.contact_phone)
@@ -79,31 +100,31 @@ const submitForm = async () => {
     formData.append('candidate_id', candidate_id.value)
 
     try {
+
+
+      //DEBUG
+      console.log("formData = ", formData);
+
+      // POSTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
       await axios.post('http://localhost:8000/api/candidate/applications-add', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+        headers: {'Content-Type': 'multipart/form-data'}
       })
 
-      // Optional: Show success message for 1.5 seconds, then redirect
+      // LOGIC: SHOE SUCCESS
       showSuccess.value = true
       submitted.value = false
 
       setTimeout(() => {
-        router.push('/candidate/applications') // ✅ Redirect after success
+
+        // SUCESS: REDIRECT
+        router.push('/candidate/applications') 
       }, 1500)
-    } catch (error) {
-      console.error('Application submission failed:', error)
-    }
+    } catch (error) {console.error('Application submission failed:', error)}
   }
 }
 </script>
 
 <style scoped>
-.btn {
-  background-color: rgb(63, 2, 216);
-}
-.btn:hover {
-  background-color: rgb(69, 5, 230);
-}
+.btn {background-color: rgb(63, 2, 216);}
+.btn:hover {background-color: rgb(69, 5, 230);}
 </style>
