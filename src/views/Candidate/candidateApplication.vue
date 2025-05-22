@@ -22,7 +22,7 @@
             aria-expanded="false"
             :aria-controls="'collapse' + index"
           >
-            <div class="w-100 d-flex justify-content-between align-items-center">
+            <div class="w-100 d-flex justify-content-between align-items-center flex-wrap gap-2">
               <div>
                 <h3 class="fw-semibold m-0">{{ app.job.title }}</h3>
               </div>
@@ -33,7 +33,7 @@
                 </div>
                 <button
                   v-if="app.status === 'pending'"
-                  class="btn btn-danger me-4"
+                  class="btn btn-danger me-2"
                   @click.stop="openConfirmModal(app)"
                 >
                   Cancel
@@ -48,18 +48,50 @@
           :aria-labelledby="'heading' + index"
           data-bs-parent="#applicationsAccordion"
         >
-          <div class="accordion-body fs-5">
-            <p><strong>Contact Phone:</strong> {{ app.contact_phone }}</p>
-            <p><strong>Job Location:</strong> {{ app.job.location }}</p>
-            <p><strong>Salary:</strong> {{ app.job.salary_from }} - {{ app.job.salary_to }}</p>
-            <p><strong>Deadline:</strong> {{ app.job.deadline }}</p>
-            <p><strong>Description:</strong> {{ app.job.description }}</p>
-            <p><strong>Responsibilities:</strong></p>
-            <ul>
-              <li v-for="(item, idx) in splitResponsibilities(app.job.responsibilities)" :key="idx">
-                {{ item }}
-              </li>
-            </ul>
+          <div class="accordion-body fs-6">
+            <div class="row mb-3">
+              <div class="col-md-6 mb-2">
+                <i class="fas fa-phone-alt me-2 text-primary"></i>
+                <strong>Contact Phone:</strong> {{ app.contact_phone }}
+              </div>
+              <div class="col-md-6 mb-2">
+                <i class="fas fa-map-marker-alt me-2 text-success"></i>
+                <strong>Location:</strong> {{ app.job.location }}
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6 mb-2">
+                <i class="fas fa-dollar-sign me-2 text-info"></i>
+                <strong>Salary:</strong> {{ app.job.salary_from }} - {{ app.job.salary_to }}
+              </div>
+              <div class="col-md-6 mb-2">
+                <i class="fas fa-calendar-alt me-2 text-warning"></i>
+                <strong>Deadline:</strong> {{ app.job.deadline }}
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <i class="fas fa-align-left me-2 text-secondary"></i>
+              <strong>Description:</strong>
+              <div class="bg-light p-3 rounded border mt-1">
+                {{ app.job.description }}
+              </div>
+            </div>
+
+            <div>
+              <i class="fas fa-tasks me-2 text-secondary"></i>
+              <strong>Responsibilities:</strong>
+              <ul class="list-group list-group-flush mt-2">
+                <li
+                  v-for="(item, idx) in splitResponsibilities(app.job.responsibilities)"
+                  :key="idx"
+                  class="list-group-item"
+                >
+                  {{ item }}
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -93,7 +125,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
@@ -106,22 +137,18 @@ let modalInstance = null
 
 onMounted(async () => {
   try {
-    // Step 1: Get the authenticated user
     const userResponse = await axios.get('http://localhost:8000/api/user')
     const user = userResponse.data
 
-    // Step 2: Get the candidate using the user_id
     const candidateResponse = await axios.get(`http://localhost:8000/api/candidate/user/${user.id}`)
     const candidate = candidateResponse.data
 
-    // Step 3: Get applications using the candidate.id
     const appResponse = await axios.get(`http://localhost:8000/api/applications/candidate/${candidate.id}`)
     applications.value = appResponse.data.applications
   } catch (error) {
     console.error('Error fetching data:', error)
   }
 
-  // Initialize Bootstrap modal
   const modalElement = deleteModalRef.value
   if (modalElement) {
     modalInstance = new bootstrap.Modal(modalElement)
@@ -185,12 +212,28 @@ const splitResponsibilities = (text) => {
   background-color: #5638ff;
 }
 
-.btn-outline-light {
-  border-color: #ffffff88;
-  color: white;
+.accordion-button {
+  font-size: 1.1rem;
 }
 
-.btn-outline-light:hover {
-  background-color: #ffffff22;
+.accordion-body strong {
+  color: #333;
+}
+
+.list-group-item {
+  background-color: #f8f9fa;
+  border: none;
+  padding-left: 1.5rem;
+}
+
+.bg-light {
+  background-color: #f8f9fa !important;
+}
+
+.accordion-item {
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 </style>

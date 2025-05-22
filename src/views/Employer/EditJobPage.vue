@@ -21,21 +21,43 @@
             type="text" 
             class="form-input" 
             placeholder=" "
-            required
+            @input="clearError('title')"
+            :class="{ 'input-error': errors.title }"
           />
           <label>Job Title *</label>
-          <div class="input-underline"></div>
+          <div class="input-underline" :class="{ 'error-line': errors.title }"></div>
+          <transition name="fade">
+            <div v-if="errors.title" class="error-message-container">
+              <svg class="error-icon" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
+              <span class="error-message">{{ errors.title }}</span>
+            </div>
+          </transition>
         </div>
 
         <!-- Work Type & Location -->
         <div class="form-row">
           <div class="form-group floating-label">
-            <select v-model="form.work_type" class="form-input" required>
+            <select 
+              v-model="form.work_type" 
+              class="form-input" 
+              @change="clearError('work_type')"
+              :class="{ 'input-error': errors.work_type }"
+            >
               <option disabled value=""></option>
               <option v-for="type in workTypes" :key="type" :value="type">{{ type }}</option>
             </select>
             <label>Work Type *</label>
-            <div class="input-underline"></div>
+            <div class="input-underline" :class="{ 'error-line': errors.work_type }"></div>
+            <transition name="fade">
+              <div v-if="errors.work_type" class="error-message-container">
+                <svg class="error-icon" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+                <span class="error-message">{{ errors.work_type }}</span>
+              </div>
+            </transition>
           </div>
 
           <div class="form-group floating-label">
@@ -44,23 +66,46 @@
               type="text" 
               class="form-input" 
               placeholder=" "
+              @input="clearError('location')"
+              :class="{ 'input-error': errors.location }"
             />
-            <label>Location</label>
-            <div class="input-underline"></div>
+            <label>Location *</label>
+            <div class="input-underline" :class="{ 'error-line': errors.location }"></div>
+            <transition name="fade">
+              <div v-if="errors.location" class="error-message-container">
+                <svg class="error-icon" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+                <span class="error-message">{{ errors.location }}</span>
+              </div>
+            </transition>
           </div>
         </div>
 
         <!-- Category & Deadline -->
         <div class="form-row">
           <div class="form-group floating-label">
-            <select v-model="form.category_id" class="form-input" required>
+            <select 
+              v-model="form.category_id" 
+              class="form-input"
+              @change="clearError('category_id')"
+              :class="{ 'input-error': errors.category_id }"
+            >
               <option disabled value=""></option>
               <option v-for="category in categories" :key="category.id" :value="category.id">
                 {{ category.category_name }}
               </option>
             </select>
             <label>Category *</label>
-            <div class="input-underline"></div>
+            <div class="input-underline" :class="{ 'error-line': errors.category_id }"></div>
+            <transition name="fade">
+              <div v-if="errors.category_id" class="error-message-container">
+                <svg class="error-icon" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+                <span class="error-message">{{ errors.category_id }}</span>
+              </div>
+            </transition>
           </div>
 
           <div class="form-group floating-label">
@@ -69,10 +114,19 @@
               type="date" 
               class="form-input" 
               placeholder=" "
-              required
+              @input="clearError('deadline')"
+              :class="{ 'input-error': errors.deadline }"
             />
             <label>Application Deadline *</label>
-            <div class="input-underline"></div>
+            <div class="input-underline" :class="{ 'error-line': errors.deadline }"></div>
+            <transition name="fade">
+              <div v-if="errors.deadline" class="error-message-container">
+                <svg class="error-icon" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+                <span class="error-message">{{ errors.deadline }}</span>
+              </div>
+            </transition>
           </div>
         </div>
 
@@ -86,10 +140,21 @@
                 type="number" 
                 class="form-input" 
                 placeholder=" "
+                @input="validateSalary('salary_from')"
+                :class="{ 'input-error': errors.salary_from }"
+                min="0"
               />
             </div>
             <label>Salary From</label>
-            <div class="input-underline"></div>
+            <div class="input-underline" :class="{ 'error-line': errors.salary_from }"></div>
+            <transition name="fade">
+              <div v-if="errors.salary_from" class="error-message-container">
+                <svg class="error-icon" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+                <span class="error-message">{{ errors.salary_from }}</span>
+              </div>
+            </transition>
           </div>
 
           <div class="form-group floating-label">
@@ -100,10 +165,21 @@
                 type="number" 
                 class="form-input" 
                 placeholder=" "
+                @input="validateSalary('salary_to')"
+                :class="{ 'input-error': errors.salary_to }"
+                min="0"
               />
             </div>
             <label>Salary To</label>
-            <div class="input-underline"></div>
+            <div class="input-underline" :class="{ 'error-line': errors.salary_to }"></div>
+            <transition name="fade">
+              <div v-if="errors.salary_to" class="error-message-container">
+                <svg class="error-icon" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+                <span class="error-message">{{ errors.salary_to }}</span>
+              </div>
+            </transition>
           </div>
         </div>
 
@@ -113,10 +189,19 @@
             v-model="form.description" 
             class="form-input textarea" 
             placeholder=" "
-            required
+            @input="clearError('description')"
+            :class="{ 'input-error': errors.description }"
           ></textarea>
           <label>Job Description *</label>
-          <div class="input-underline"></div>
+          <div class="input-underline" :class="{ 'error-line': errors.description }"></div>
+          <transition name="fade">
+            <div v-if="errors.description" class="error-message-container">
+              <svg class="error-icon" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
+              <span class="error-message">{{ errors.description }}</span>
+            </div>
+          </transition>
         </div>
 
         <!-- Responsibilities -->
@@ -125,9 +210,19 @@
             v-model="form.responsibilities" 
             class="form-input textarea" 
             placeholder=" "
+            @input="clearError('responsibilities')"
+            :class="{ 'input-error': errors.responsibilities }"
           ></textarea>
-          <label>Key Responsibilities</label>
-          <div class="input-underline"></div>
+          <label>Key Responsibilities *</label>
+          <div class="input-underline" :class="{ 'error-line': errors.responsibilities }"></div>
+          <transition name="fade">
+            <div v-if="errors.responsibilities" class="error-message-container">
+              <svg class="error-icon" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
+              <span class="error-message">{{ errors.responsibilities }}</span>
+            </div>
+          </transition>
         </div>
 
         <!-- Benefits -->
@@ -136,9 +231,19 @@
             v-model="form.benefits" 
             class="form-input textarea" 
             placeholder=" "
+            @input="clearError('benefits')"
+            :class="{ 'input-error': errors.benefits }"
           ></textarea>
-          <label>Benefits & Perks</label>
-          <div class="input-underline"></div>
+          <label>Benefits & Perks *</label>
+          <div class="input-underline" :class="{ 'error-line': errors.benefits }"></div>
+          <transition name="fade">
+            <div v-if="errors.benefits" class="error-message-container">
+              <svg class="error-icon" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
+              <span class="error-message">{{ errors.benefits }}</span>
+            </div>
+          </transition>
         </div>
 
         <!-- Form Actions -->
@@ -201,6 +306,7 @@ const categories = ref([])
 const workTypes = ref([])
 const isSubmitting = ref(false)
 const showSuccess = ref(false)
+const errors = ref({})
 
 const fetchCategories = async () => {
   try {
@@ -250,7 +356,128 @@ const fetchJob = async () => {
   }
 }
 
+const validateForm = () => {
+  let isValid = true
+  errors.value = {}
+
+  // Job Title validation (min 10 chars)
+  if (!form.value.title.trim()) {
+    errors.value.title = 'Job title is required'
+    isValid = false
+  } else if (form.value.title.trim().length < 10) {
+    errors.value.title = 'Job title must be at least 10 characters'
+    isValid = false
+  }
+
+  // Work Type validation
+  if (!form.value.work_type) {
+    errors.value.work_type = 'Work type is required'
+    isValid = false
+  }
+
+  // Location validation
+  if (!form.value.location.trim()) {
+    errors.value.location = 'Location is required'
+    isValid = false
+  }
+
+  // Category validation
+  if (!form.value.category_id) {
+    errors.value.category_id = 'Category is required'
+    isValid = false
+  }
+
+  // Deadline validation
+  if (!form.value.deadline) {
+    errors.value.deadline = 'Deadline is required'
+    isValid = false
+  } else {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const deadlineDate = new Date(form.value.deadline)
+    if (deadlineDate < today) {
+      errors.value.deadline = 'Deadline must be in the future'
+      isValid = false
+    }
+  }
+
+  // Job Description validation (min 10 chars)
+  if (!form.value.description.trim()) {
+    errors.value.description = 'Description is required'
+    isValid = false
+  } else if (form.value.description.trim().length < 10) {
+    errors.value.description = 'Description must be at least 10 characters'
+    isValid = false
+  }
+
+  // Responsibilities validation (min 10 chars)
+  if (!form.value.responsibilities.trim()) {
+    errors.value.responsibilities = 'Responsibilities are required'
+    isValid = false
+  } else if (form.value.responsibilities.trim().length < 10) {
+    errors.value.responsibilities = 'Responsibilities must be at least 10 characters'
+    isValid = false
+  }
+
+  // Benefits validation (min 10 chars)
+  if (!form.value.benefits.trim()) {
+    errors.value.benefits = 'Benefits are required'
+    isValid = false
+  } else if (form.value.benefits.trim().length < 10) {
+    errors.value.benefits = 'Benefits must be at least 10 characters'
+    isValid = false
+  }
+
+  // Salary validation
+  if (form.value.salary_from !== '' && form.value.salary_from < 0) {
+    errors.value.salary_from = 'Salary cannot be negative'
+    isValid = false
+  }
+
+  if (form.value.salary_to !== '' && form.value.salary_to < 0) {
+    errors.value.salary_to = 'Salary cannot be negative'
+    isValid = false
+  }
+
+  if (form.value.salary_from !== '' && form.value.salary_to !== '' && 
+      parseFloat(form.value.salary_from) > parseFloat(form.value.salary_to)) {
+    errors.value.salary_from = 'Minimum salary cannot be higher than maximum'
+    errors.value.salary_to = 'Maximum salary cannot be lower than minimum'
+    isValid = false
+  }
+
+  return isValid
+}
+
+const clearError = (field) => {
+  if (errors.value[field]) {
+    delete errors.value[field]
+  }
+}
+
+const validateSalary = (field) => {
+  clearError(field)
+  if (form.value[field] !== '' && form.value[field] < 0) {
+    errors.value[field] = 'Salary cannot be negative'
+    return false
+  }
+  
+  // Validate salary range if both fields have values
+  if (form.value.salary_from !== '' && form.value.salary_to !== '' && 
+      parseFloat(form.value.salary_from) > parseFloat(form.value.salary_to)) {
+    errors.value.salary_from = 'Minimum salary cannot be higher than maximum'
+    errors.value.salary_to = 'Maximum salary cannot be lower than minimum'
+    return false
+  }
+  
+  return true
+}
+
 const updateJob = async () => {
+  if (!validateForm()) {
+    return
+  }
+
   isSubmitting.value = true
   try {
     await axios.put(`http://localhost:8000/api/employer/jobs/${jobId}`, form.value, {
@@ -563,6 +790,49 @@ watch(() => route.params.id, (newId) => {
 .slide-fade-leave-to {
   transform: translateX(-50%) translateY(20px);
   opacity: 0;
+}
+
+/* Error Styles */
+.input-error {
+  border-bottom-color: #e53e3e !important;
+  background-color: #fff5f5 !important;
+}
+
+.error-line {
+  background: #e53e3e !important;
+  width: 100% !important;
+}
+
+.error-message-container {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background-color: #fff5f5;
+  border-radius: 4px;
+}
+
+.error-icon {
+  width: 1rem;
+  height: 1rem;
+  color: #e53e3e;
+  margin-right: 0.5rem;
+  flex-shrink: 0;
+}
+
+.error-message {
+  font-size: 0.8125rem;
+  color: #e53e3e;
+  line-height: 1.4;
+}
+
+/* Animations */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+  transform: translateY(-5px);
 }
 
 /* Responsive Adjustments */

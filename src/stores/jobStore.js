@@ -7,13 +7,15 @@ export const useJobStore = defineStore('job', () => {
     const loading = ref(false)
     const error = ref(null)
 
+    // clear error
     const clearError = () => {
         error.value = null
     }
 
+    // handle error
     const handleError = (err, defaultMessage) => {
         let errorMessage = defaultMessage
-        if (err.response && err.response.data && err.response.data.message) {
+        if (err.response?.data?.message) {
             errorMessage = err.response.data.message
         } else if (err.message) {
             errorMessage = err.message
@@ -22,21 +24,23 @@ export const useJobStore = defineStore('job', () => {
         throw new Error(errorMessage)
     }
 
-    const fetchJobs = async() => {
+    // get jobs only if status is approved
+    const fetchJobs = async () => {
         loading.value = true
         clearError()
         try {
-            const response = await axios.get('http://localhost:8000/api/jobs') //updated
-            jobs.value = response.data
-            return response.data
+            const response = await axios.get('http://localhost:8000/api/jobs')
+            jobs.value = response.data.filter(job => job.status === 'approved')
+            return jobs.value
         } catch (err) {
-            handleError(err, 'Failed to load jobs. Please try again.')
+            handleError(err, 'failed to load jobs')
         } finally {
             loading.value = false
         }
     }
 
-    const createJob = async(jobData) => {
+    // create a job
+    const createJob = async (jobData) => {
         loading.value = true
         clearError()
         try {
@@ -49,13 +53,14 @@ export const useJobStore = defineStore('job', () => {
             jobs.value.push(response.data)
             return response.data
         } catch (err) {
-            handleError(err, 'Failed to create job. Please check your data.')
+            handleError(err, 'failed to create job')
         } finally {
             loading.value = false
         }
     }
 
-    const updateJob = async(id, jobData) => {
+    // update a job
+    const updateJob = async (id, jobData) => {
         loading.value = true
         clearError()
         try {
@@ -66,26 +71,28 @@ export const useJobStore = defineStore('job', () => {
             }
             return response.data
         } catch (err) {
-            handleError(err, 'Failed to update job. It may have been modified or deleted.')
+            handleError(err, 'failed to update job')
         } finally {
             loading.value = false
         }
     }
 
-    const deleteJob = async(id) => {
+    // delete a job
+    const deleteJob = async (id) => {
         loading.value = true
         clearError()
         try {
             await axios.delete(`http://localhost:3000/jobs/${id}`)
             jobs.value = jobs.value.filter(job => job.id !== id)
         } catch (err) {
-            handleError(err, 'Failed to delete job. It may have already been deleted.')
+            handleError(err, 'failed to delete job')
         } finally {
             loading.value = false
         }
     }
 
-    const getJobById = async(id) => {
+    // get job by id
+    const getJobById = async (id) => {
         loading.value = true
         clearError()
         try {
@@ -95,7 +102,7 @@ export const useJobStore = defineStore('job', () => {
             const response = await axios.get(`http://localhost:3000/jobs/${id}`)
             return response.data
         } catch (err) {
-            handleError(err, 'Job not found. It may have been deleted.')
+            handleError(err, 'job not found')
         } finally {
             loading.value = false
         }
