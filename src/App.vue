@@ -8,7 +8,7 @@ const route = useRoute();
 
 // Define which pages are auth pages (no sidebar or header)
 const isAuthPage = computed(() => {
-  return ['/login', '/register', '/candidateRegister', '/employerRegister'].includes(route.path);
+  return ['/','/login', '/register', '/candidateRegister', '/employerRegister'].includes(route.path);
 });
 </script>
 
