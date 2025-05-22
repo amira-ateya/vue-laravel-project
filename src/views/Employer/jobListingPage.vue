@@ -30,6 +30,8 @@
           <option value="active">Active</option>
           <option value="pending">Pending</option>
           <option value="closed">Closed</option>
+          <option value="approved">Approved</option>
+          <option value="rejected">Rejected</option>
         </select>
         <select v-model="typeFilter" @change="filterJobs" class="filter-select">
           <option value="">All Types</option>
@@ -65,15 +67,23 @@
 
     <!-- Content Section -->
     <div class="content-section">
+      <!-- Error State -->
+      <div v-if="error" class="error-state">
+        <i class="fas fa-exclamation-triangle"></i>
+        <p>{{ error }}</p>
+        <button @click="fetchJobs" class="btn primary">
+          Retry
+        </button>
+      </div>
+
       <!-- Loading State -->
-      <div v-if="loading" class="loading-state">
+      <div v-else-if="loading" class="loading-state">
         <div class="spinner"></div>
         <p>Loading your job listings...</p>
       </div>
 
       <!-- Empty State -->
       <div v-else-if="filteredJobs.length === 0" class="empty-state">
-        <!-- <img src="@/assets/no-jobs.svg" alt="No jobs" class="empty-image"> -->
         <h3>No jobs found</h3>
         <p>Try adjusting your search or post a new job</p>
         <router-link to="/employer/post-job" class="btn primary">
@@ -86,7 +96,7 @@
         <div v-for="job in paginatedJobs" :key="job.id" class="job-card">
           <div class="job-card-header">
             <h3 class="job-title">{{ job.title }}</h3>
-            <span class="job-status" :class="job.status">{{ job.status }}</span>
+            <span class="job-status" :class="job.status.toLowerCase()">{{ job.status }}</span>
           </div>
           
           <div class="job-details">
@@ -100,7 +110,7 @@
             </div>
             <div class="detail-item">
               <i class="fas fa-money-bill-wave"></i>
-              <span v-if="job.salary_from && job.salary_to">
+              <span v-if="job.salary_from || job.salary_to">
                 {{ formatSalary(job.salary_from) }} - {{ formatSalary(job.salary_to) }}
               </span>
               <span v-else>Salary not specified</span>
@@ -110,7 +120,7 @@
           <div class="job-footer">
             <div class="applications-count">
               <i class="fas fa-users"></i>
-              <span>{{ job.applications_count }} Applications</span>
+              <span>{{ job.applications_count || 0 }} Applications</span>
             </div>
             <div class="job-actions">
               <router-link 
@@ -223,12 +233,12 @@ export default {
         'hybrid': 'Hybrid',
         'remote': 'Remote'
       }
-      return types[type] || type
+      return types[type] || type.charAt(0).toUpperCase() + type.slice(1)
     }
 
     // Format salary for display
     const formatSalary = (amount) => {
-      if (!amount) return ''
+      if (!amount && amount !== 0) return 'Salary not specified';
       return new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'EGP',
@@ -256,7 +266,7 @@ export default {
         const matchesSearch = job.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
                              job.location.toLowerCase().includes(searchQuery.value.toLowerCase())
         
-        const matchesStatus = !statusFilter.value || job.status === statusFilter.value
+        const matchesStatus = !statusFilter.value || job.status.toLowerCase() === statusFilter.value.toLowerCase()
         const matchesType = !typeFilter.value || job.work_type === typeFilter.value
         
         return matchesSearch && matchesStatus && matchesType
@@ -265,7 +275,7 @@ export default {
 
     // Calculate total applications
     const totalApplications = computed(() => {
-      return filteredJobs.value.reduce((total, job) => total + job.applications_count, 0)
+      return filteredJobs.value.reduce((total, job) => total + (job.applications_count || 0), 0)
     })
 
     // Pagination logic
@@ -513,6 +523,26 @@ export default {
   padding: 1.5rem;
 }
 
+/* Error State */
+.error-state {
+  padding: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  color: #dc2626;
+}
+
+.error-state i {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.error-state p {
+  margin: 0 0 1.5rem 0;
+}
+
 /* Loading State */
 .loading-state {
   padding: 3rem;
@@ -544,13 +574,6 @@ export default {
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-}
-
-.empty-image {
-  width: 200px;
-  height: auto;
-  margin-bottom: 1rem;
-  opacity: 0.7;
 }
 
 .empty-state h3 {
@@ -618,6 +641,16 @@ export default {
 }
 
 .job-status.closed {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.job-status.approved {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.job-status.rejected {
   background-color: #fee2e2;
   color: #b91c1c;
 }
