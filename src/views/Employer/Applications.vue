@@ -1,5 +1,6 @@
 <template>
   <div class="applications-dashboard">
+    <!-- Header Section -->
     <div class="dashboard-header">
       <h1 class="title">Job Applications</h1>
       <div class="controls">
@@ -25,6 +26,7 @@
       </div>
     </div>
 
+    <!-- Stats Bar -->
     <div class="stats-bar">
       <div class="stat-card">
         <div class="stat-value">{{ totalApplications }}</div>
@@ -44,11 +46,13 @@
       </div>
     </div>
 
+    <!-- Loading State -->
     <div v-if="loading" class="loading-state">
       <div class="spinner"></div>
       <p>Loading applications...</p>
     </div>
 
+    <!-- Empty State -->
     <div v-else-if="filteredApplications.length === 0" class="empty-state">
       <svg class="empty-icon" viewBox="0 0 24 24">
         <path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/>
@@ -58,8 +62,9 @@
       <p v-else>No applications have been submitted yet</p>
     </div>
 
+    <!-- Applications Grid -->
     <div v-else class="applications-grid">
-      <div v-for="app in filteredApplications" :key="app.id" class="application-card">
+      <div v-for="app in paginatedApplications" :key="app.id" class="application-card">
         <div class="card-header">
           <div class="job-info">
             <h2 class="job-title">{{ app.job.title }}</h2>
@@ -124,7 +129,7 @@
                   </svg>
                   LinkedIn
                 </a>
-                <a :href="`http://localhost:8000/storage/${app.resume_snapshot}`" target="_blank" class="link-button">
+                <a :href="getResumeUrl(app.resume_snapshot)" target="_blank" class="link-button">
                   <svg class="icon" viewBox="0 0 24 24">
                     <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
                   </svg>
@@ -146,6 +151,7 @@
       </div>
     </div>
 
+    <!-- Pagination Controls -->
     <div v-if="filteredApplications.length > 0" class="pagination-controls">
       <button 
         class="pagination-button" 
@@ -168,8 +174,10 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import axios from 'axios'
 
+const router = useRouter()
 const applications = ref([])
 const filteredApplications = ref([])
 const loading = ref(true)
@@ -178,8 +186,10 @@ const statusFilter = ref('')
 const currentPage = ref(1)
 const itemsPerPage = 5
 
-onMounted(async () => {
+// Fetch applications from API
+const fetchApplications = async () => {
   try {
+    loading.value = true
     const response = await axios.get('http://localhost:8000/api/employer/applications', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -189,12 +199,17 @@ onMounted(async () => {
     filteredApplications.value = response.data
   } catch (error) {
     console.error('Error fetching applications:', error)
+    if (error.response?.status === 401) {
+      router.push('/login')
+    }
   } finally {
     loading.value = false
   }
-})
+}
 
+// Format date
 const formatDate = (dateStr) => {
+  if (!dateStr) return ''
   const date = new Date(dateStr)
   return date.toLocaleDateString('en-GB', {
     day: 'numeric',
@@ -203,30 +218,39 @@ const formatDate = (dateStr) => {
   })
 }
 
-
+// Get initials from name
 const getInitials = (name) => {
+  if (!name) return ''
   return name.split(' ').map(n => n[0]).join('').toUpperCase()
 }
 
+// Get full resume URL
+const getResumeUrl = (path) => {
+  if (!path) return '#'
+  return `http://localhost:8000/storage/${path}`
+}
+
+// Filter applications based on search and status
 const filterApplications = () => {
-  let filtered = applications.value
-  
+  let filtered = [...applications.value]
+
   if (statusFilter.value) {
     filtered = filtered.filter(app => app.status === statusFilter.value)
   }
-  
+
   if (searchQuery.value) {
     const query = searchQuery.value.toLowerCase()
-    filtered = filtered.filter(app => 
-      app.job.title.toLowerCase().includes(query) ||
-      app.candidate.user.name.toLowerCase().includes(query) ||
-      app.candidate.current_job.toLowerCase().includes(query)
+    filtered = filtered.filter(app =>
+      (app.job?.title?.toLowerCase().includes(query)) ||
+      (app.candidate?.user?.name?.toLowerCase().includes(query)) ||
+      (app.candidate?.current_job?.toLowerCase().includes(query))
     )
   }
-  
+
   filteredApplications.value = filtered
   currentPage.value = 1
 }
+
 
 // Computed properties
 const totalApplications = computed(() => applications.value.length)
@@ -243,6 +267,9 @@ const paginatedApplications = computed(() => {
 const totalPages = computed(() => {
   return Math.ceil(filteredApplications.value.length / itemsPerPage)
 })
+
+// Fetch applications on component mount
+onMounted(fetchApplications)
 </script>
 
 <style scoped>

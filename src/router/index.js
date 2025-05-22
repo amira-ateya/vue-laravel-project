@@ -137,6 +137,7 @@ const routes = [
         path: 'applications',
         name: 'employer-applications',
         component: () => import('@/views/Employer/Applications.vue'),
+         props: true,
         meta: { requiresAuth: true, role: 'employer' }
       },
       // post jobs added
