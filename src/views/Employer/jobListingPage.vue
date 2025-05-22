@@ -27,9 +27,7 @@
       <div class="filter-controls">
         <select v-model="statusFilter" @change="filterJobs" class="filter-select">
           <option value="">All Statuses</option>
-          <option value="active">Active</option>
           <option value="pending">Pending</option>
-          <option value="closed">Closed</option>
           <option value="approved">Approved</option>
           <option value="rejected">Rejected</option>
         </select>
