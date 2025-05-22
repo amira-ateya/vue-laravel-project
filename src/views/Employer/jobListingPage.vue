@@ -122,7 +122,7 @@
             </div>
             <div class="job-actions">
               <router-link 
-                :to="`/employer/job/${job.id}/applications`" 
+                :to="`/employer/job-listing`" 
                 class="btn-icon view"
                 title="View Applications"
               >
