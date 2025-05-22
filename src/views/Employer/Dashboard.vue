@@ -187,6 +187,9 @@
 <script>
 import axios from 'axios';
 
+
+//OPTIONAL APPROACH
+
 export default {
   name: 'EmployerDashboard',
   data() {
@@ -228,6 +231,8 @@ export default {
     document.removeEventListener('click', this.closeDropdown);
   },
   methods: {
+
+    // FETCH ALL THE DATA FOR THE PAGE
     async fetchDashboardData() {
       try {
         this.loading = true;
@@ -247,8 +252,14 @@ export default {
         ]);
 
         this.employerData = profileRes.data;
+        console.log("employer data = ", this.employerData); //DEBUG: (worked)
+
         this.stats = statsRes.data;
+        console.log("stats = ", statsRes.data); //DEBUG: (gave me zerossss)
+
         this.latestJobs = jobsRes.data;
+        // console.log("latest jobs = ", this.latestJobs); //DEBUG
+
         this.latestApplications = appsRes.data;
 
         // Set default avatar with initials
