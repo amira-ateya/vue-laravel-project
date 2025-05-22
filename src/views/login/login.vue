@@ -170,7 +170,7 @@ const handleLogin = async () => {
     console.log("the password we input it : password.value = ", password.value);
 
     // send email, password to authStore
-    const credentials = { email: email.value,password: password.value}; //CHANGE HERE
+    const credentials = { email: email.value,password: password.value};
 
     //-------------------------------------------
     const response = await authStore.login(credentials);
@@ -181,12 +181,16 @@ const handleLogin = async () => {
     // if everything is fine ==> route
     if (response.status === 200) {
       const user = response.data; 
+      console.log(user)
 
       if (user.role === 'candidate') {
         router.push('/candidate/');
       } else if (user.role === 'employer') {
         router.push('/employer/dashboard');
+      }else if (user.role === 'admin') {
+        router.push('/admin');
       }
+      
     } else {
       // show error
       emailError.value = 'Invalid email or password.';
