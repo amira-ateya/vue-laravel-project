@@ -20,7 +20,7 @@
                   class="rounded"
                   style="width: 200px; height: 200px; object-fit: cover; margin-right: 15px;"
                 />
-                <input type="file" accept="image/*" @change="handleImageUpload" class="form-control" />
+                <input type="file" accept="image/*" @change="uploadImage" class="form-control" />
               </div>
             </div>
 
@@ -63,7 +63,7 @@
                 :src="pdfPreview"
                 style="width: 100%; height: 200px; border: 1px solid #ccc;"
               ></iframe>
-              <input type="file" accept=".pdf" class="form-control mt-2 mb-3" @change="handlePdfUpload" />
+              <input type="file" accept=".pdf" class="form-control mt-2 mb-3" @change="uploadPdf" />
             </div>
 
             <!-- Location -->
@@ -102,13 +102,16 @@
 </template>
 
 <script setup>
+// imports
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useRegisterStore } from './../../../stores/registerStore.js'
 import { useUserStore } from './../../../stores/userStore.ts'
 import { useCandidateStore } from '@/stores/candidateStore.ts'
 
+// variables
 const router = useRouter()
+// stores: variables
 const registerStore = useRegisterStore()
 const userStore = useUserStore()
 const candidateStore = useCandidateStore()
@@ -121,10 +124,6 @@ onMounted(() => {
   }
 })
 
-// Image and PDF preview
-const imagePreview = ref("https://cdn-icons-png.flaticon.com/512/847/847969.png")
-const pdfPreview = ref("https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")
-
 // Form fields
 const phone = ref("")
 const linkedin = ref("")
@@ -132,62 +131,73 @@ const location = ref("")
 const experience = ref("")
 const submitted = ref(false)
 
-// Validations
+// FRONT Validations
 const validPhone = computed(() => /^\+?\d{10,15}$/.test(phone.value))
 const validLinkedin = computed(() => /^https?:\/\/(www\.)?linkedin\.com\/.*$/.test(linkedin.value))
 
-function handleImageUpload(event) {
+//=====FILES=======================================================================================
+
+// files containers
+const imageFile = ref(null)
+const resumeFile = ref(null)
+
+// files preview
+const imagePreview = ref("https://cdn-icons-png.flaticon.com/512/847/847969.png")
+const pdfPreview = ref("https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")
+
+// image upload method
+function uploadImage(event) {
   const file = event.target.files[0]
-  if (file) {
+  if (file && file.type.startsWith("image/")) {
+    imageFile.value = file
     imagePreview.value = URL.createObjectURL(file)
   }
 }
 
-function handlePdfUpload(event) {
+// resume upload method
+function uploadPdf(event) {
   const file = event.target.files[0]
   if (file && file.type === "application/pdf") {
+    resumeFile.value = file
     pdfPreview.value = URL.createObjectURL(file)
   }
 }
+
+//=====FILES=======================================================================================
 
 async function handleSubmit() {
   submitted.value = true
 
   if (validPhone.value && validLinkedin.value && location.value.trim() && experience.value) {
     try {
-      const timestamp = new Date().toISOString()
-
-      const userData = {
-      name: registerStore.step1Data.fullName,
-      email: registerStore.step1Data.email,
-      password: registerStore.step1Data.password,
-      password_confirmation: registerStore.step1Data.password,
-      profile_picture: imagePreview.value,
-      role: 'candidate',
-      created_at: timestamp,
-      updated_at: timestamp
-    }
-
-    console.log("candidateRegister: handleSubmit: userData", userData); //debug
-
-
-      const createdUser = await userStore.createUser(userData)
-      console.log("candidateRegister: handleSubmit: createdUser", createdUser); //debug
-
-      const candidateData = {
-        user_id: createdUser.data.id,
-        resume: pdfPreview.value,
-        linkedin_profile: linkedin.value,
-        phone_number: phone.value,
-        experience_level: experience.value,
-        location: location.value,
-        created_at: timestamp,
-        updated_at: timestamp
+      // 1. Create FormData for user with profile_picture file
+      const userFormData = new FormData()
+      userFormData.append('name', registerStore.step1Data.fullName)
+      userFormData.append('email', registerStore.step1Data.email)
+      userFormData.append('password', registerStore.step1Data.password)
+      userFormData.append('password_confirmation', registerStore.step1Data.password)
+      userFormData.append('role', 'candidate')
+      if (imageFile.value) {
+        userFormData.append('profile_picture', imageFile.value)
       }
 
-      console.log('candidateRegister: handleSubmit: candidateData = ', candidateData); //debug
+      // Send user creation request
+      const createdUser = await userStore.createUser(userFormData)
 
-      await candidateStore.createCandidate(candidateData)
+      // 2. Create FormData for candidate with resume file
+      const candidateFormData = new FormData()
+      candidateFormData.append('user_id', createdUser.data.id)
+      candidateFormData.append('experience_level', experience.value)
+      candidateFormData.append('linkedin_profile', linkedin.value)
+      candidateFormData.append('phone_number', phone.value)
+      candidateFormData.append('location', location.value)
+      if (resumeFile.value) {
+        candidateFormData.append('resume', resumeFile.value)
+      }
+      // Add other candidate fields if needed (currentJob, bio, qualification)
+
+      // Send candidate creation request
+      await candidateStore.createCandidate(candidateFormData)
 
       router.push('/login')
     } catch (err) {
@@ -197,6 +207,7 @@ async function handleSubmit() {
     console.log("Validation failed")
   }
 }
+
 </script>
 
 <style scoped>

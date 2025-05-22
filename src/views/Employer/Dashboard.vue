@@ -12,7 +12,7 @@
         </button>
         <div class="user-dropdown" @click.stop="toggleDropdown">
           <div class="user-avatar">
-            <img :src="employerData.user.profile_picture || defaultAvatar" alt="Profile">
+            <img :src="userImage || defaultAvatar" alt="Profile">
           </div>
           <transition name="fade">
             <div v-if="dropdownOpen" class="dropdown-menu">
@@ -187,6 +187,9 @@
 <script>
 import axios from 'axios';
 
+
+//OPTIONAL APPROACH
+
 export default {
   name: 'EmployerDashboard',
   data() {
@@ -208,17 +211,28 @@ export default {
       latestApplications: [],
       loading: true,
       dropdownOpen: false,
-      defaultAvatar: 'https://ui-avatars.com/api/?background=random&name=U'
+      defaultAvatar: 'https://ui-avatars.com/api/?background=random&name=U',
+      user: {}, // [SENU]
+      base: 'http://localhost:8000/storage/', // [SENU]
+      userImage: '' // [SENU]
     }
   },
   async created() {
     await this.fetchDashboardData();
     document.addEventListener('click', this.closeDropdown);
+
+    const token = localStorage.getItem('token'); // [SENU]
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token; // [SENU]
+    const res = await axios.get('http://localhost:8000/api/user'); // [SENU]
+    this.user = res.data; // [SENU]
+    this.userImage = this.base + res.data.profile_picture; // [SENU]
   },
   beforeUnmount() {
     document.removeEventListener('click', this.closeDropdown);
   },
   methods: {
+
+    // FETCH ALL THE DATA FOR THE PAGE
     async fetchDashboardData() {
       try {
         this.loading = true;
@@ -238,8 +252,14 @@ export default {
         ]);
 
         this.employerData = profileRes.data;
+        console.log("employer data = ", this.employerData); //DEBUG: (worked)
+
         this.stats = statsRes.data;
+        console.log("stats = ", statsRes.data); //DEBUG: (gave me zerossss)
+
         this.latestJobs = jobsRes.data;
+        // console.log("latest jobs = ", this.latestJobs); //DEBUG
+
         this.latestApplications = appsRes.data;
 
         // Set default avatar with initials

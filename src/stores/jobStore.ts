@@ -8,8 +8,9 @@ export const useJobStore = defineStore('job', () => {
   const loading = ref(false)
   const error = ref<string | null>(null)
 
-  const apiUrl = 'http://localhost:3000/jobs'
+  const apiUrl = 'http://localhost:8000/api/employer/jobs' //update the api [worked]
 
+  // inteface
   interface Job {
     id?: number
     employer_id?: number
@@ -34,11 +35,33 @@ export const useJobStore = defineStore('job', () => {
     candidates_id?: number[]
   }
 
+
+  // fetching:
   const fetchJobs = async (): Promise<void> => {
+
     loading.value = true
     error.value = null
     try {
-      const response = await axios.get<Job[]>(apiUrl)
+
+      console.log("before getting the jobs hiii");
+
+      // get method: in the api 
+      const apiUrl = 'http://localhost:8000/api/jobs';
+
+      // add the token in the header
+      const $token = localStorage.getItem('token')
+      const response = await axios.get<Job[]>(apiUrl, {
+        headers: {
+          Accept : 'application/json',
+          Authorization: `Bearer ${$token}` 
+        }
+      });
+      
+      console.log(response.data);
+      
+
+      console.log("response = ", response); //debug
+
       jobs.value = response.data
     } catch (err) {
       error.value = 'Failed to load jobs'

@@ -75,9 +75,7 @@ export const useEmployerStore = defineStore('employer', () => {
   }
 
   // [POST CREATE EMPLOYER]
-  const createEmployer = async (
-    employerData: Omit<Employer, 'id' | 'created_at' | 'updated_at'>
-  ) => {
+  const createEmployer = async (employerData: FormData) => {
     loading.value = true
     error.value = null
     try {

@@ -14,7 +14,7 @@
         </div>
 
         
-        <div class="d-flex justify-content-center align-items-center">
+        <div class="d-flex justify-content-center align-items-center me-5">
             <!-- button to back to home -->
             <button class="btn btn-outline-primary rounded-0 me-4">Back To homepage</button>
             <!-- anchor contain notification symbol -->
