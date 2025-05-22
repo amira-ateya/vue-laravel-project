@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Welcome from '@/welcome.vue'
+import payment from '@/views/Payment/payment.vue'
 
 // [MOVED] import CandidatePublicProfile from '@/components/candidate/candidatePublicProfile.vue'
 
@@ -174,6 +175,11 @@ const routes = [
   name: 'EmployerProfile',
   component: () => import('@/views/Employer/EmployerProfile.vue')
 },
+{
+    path: '/payment',
+    name: 'Payment',
+    component: payment
+  }
 
     ]
   }
