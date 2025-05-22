@@ -12,7 +12,7 @@
         </button>
         <div class="user-dropdown" @click.stop="toggleDropdown">
           <div class="user-avatar">
-            <img :src="employerData.user.profile_picture || defaultAvatar" alt="Profile">
+            <img :src="userImage || defaultAvatar" alt="Profile">
           </div>
           <transition name="fade">
             <div v-if="dropdownOpen" class="dropdown-menu">
@@ -208,12 +208,21 @@ export default {
       latestApplications: [],
       loading: true,
       dropdownOpen: false,
-      defaultAvatar: 'https://ui-avatars.com/api/?background=random&name=U'
+      defaultAvatar: 'https://ui-avatars.com/api/?background=random&name=U',
+      user: {}, // [SENU]
+      base: 'http://localhost:8000/storage/', // [SENU]
+      userImage: '' // [SENU]
     }
   },
   async created() {
     await this.fetchDashboardData();
     document.addEventListener('click', this.closeDropdown);
+
+    const token = localStorage.getItem('token'); // [SENU]
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token; // [SENU]
+    const res = await axios.get('http://localhost:8000/api/user'); // [SENU]
+    this.user = res.data; // [SENU]
+    this.userImage = this.base + res.data.profile_picture; // [SENU]
   },
   beforeUnmount() {
     document.removeEventListener('click', this.closeDropdown);
