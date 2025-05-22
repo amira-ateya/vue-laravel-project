@@ -184,7 +184,7 @@ const handleLogin = async () => {
       console.log(user)
 
       if (user.role === 'candidate') {
-        router.push('/candidate/');
+        router.push('/candidate/jobs');
       } else if (user.role === 'employer') {
         router.push('/employer/dashboard');
       }else if (user.role === 'admin') {
