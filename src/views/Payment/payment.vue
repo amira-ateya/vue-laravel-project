@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="p-8 max-w-xl mx-auto">
     <h2 class="text-2xl font-bold mb-4">ادفع مقابل نشر الوظيفة</h2>
 
@@ -51,4 +51,4 @@ const startCheckout = async () => {
     errorMessage.value = 'حدث خطأ أثناء إنشاء جلسة الدفع.'
   }
 }
-</script>
+</script> -->
