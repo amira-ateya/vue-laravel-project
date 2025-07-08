@@ -762,4 +762,10 @@ export default {
 .fade-leave-to {
   opacity: 0;
 }
+body.dark {
+  background-color: var(--color-bg);
+color: var(--color-text);
+
+}
+
 </style>
